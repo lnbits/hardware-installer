@@ -4,6 +4,7 @@ import { Connector } from "./Connector";
 import { Configurator } from "./Configurator";
 import { Hero } from "./Hero";
 import { Programmer } from "./Programmer";
+import logo from "./logo.svg";
 // import { SerialMonitor } from "./SerialMonitor";
 
 
@@ -32,13 +33,17 @@ export const App = () => {
 
   return (
     <div id="app">
-      <Hero />
+      <button style="margin-top: 12px;" onClick={() => term.clear()}>Clear Terminal</button>
       <Connector />
       <Show when={connected()}>
         <Programmer />
         <Configurator />
       </Show>
-      <button style="margin-top: 12px;" onClick={() => term.clear()}>Clear Terminal</button>
+      <Hero />
+      <footer>
+        <img width="200" src={logo} alt="LNbits" />
+        (c) LNbits.com
+      </footer>
     </div>
   );
 };

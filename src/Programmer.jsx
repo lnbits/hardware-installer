@@ -1,3 +1,4 @@
+import { createSignal, For, Show } from "solid-js";
 import { esploader, term, connected, running, setRunning } from "./index";
 
 import data from "./versions.json";
@@ -5,6 +6,8 @@ import { addressesAndFiles } from "./config.js";
 
 
 export const Programmer = () => {
+
+  const [showFlash, setShowFlash] = createSignal(false);
 
   const erase = async () => {
     try {
@@ -63,27 +66,28 @@ export const Programmer = () => {
 
   return (
     <div id="programmer">
-      <h2>Programmer</h2>
       <Show when={connected()}>
         <button disabled={running()} onClick={erase}>Erase</button>
-        <hr />
-        <For each={data.devices} fallback={<div>Loading...</div>}>
-          {(device) => (
-            <div className="device">
-              <h3>{device}</h3>
-              <For each={data.versions} fallback={<div>Loading...</div>}>
-                {(version) => (
-                  <div class="version">
-                    <label>
-                      Bitcoinswitch ({device}) ({version})
-                    </label>
-                    <button disabled={running()} onClick={() => flash(version, device)}>Flash</button>
-                  </div>
-                )}
-              </For>
-            </div>
-          )}
-        </For>
+        <button onClick={() => setShowFlash(!showFlash())}>Flash</button>
+        <Show when={showFlash()}>
+            <For each={data.devices} fallback={<div>Loading...</div>}>
+              {(device) => (
+                <div className="device">
+                  <h3>{device}</h3>
+                  <For each={data.versions} fallback={<div>Loading...</div>}>
+                    {(version) => (
+                      <div class="version">
+                        <label>
+                          Bitcoinswitch ({device}) ({version})
+                        </label>
+                        <button disabled={running()} onClick={() => flash(version, device)}>Flash</button>
+                      </div>
+                    )}
+                  </For>
+                </div>
+              )}
+            </For>
+          </Show>
       </Show>
     </div>
   );

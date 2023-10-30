@@ -11,7 +11,7 @@ export const [running, setRunning] = createSignal(false);
 export const [esploader, setEsploader] = createSignal(null);
 
 
-export const term = new Terminal({ cols: 120, rows: 34 });
+export const term = new Terminal({ cols: 120, rows: 21 });
 term.open(document.getElementById("terminal"));
 
 render(

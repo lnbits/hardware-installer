@@ -63,7 +63,6 @@ export const Connector = () => {
 
   return (
     <div id="connector">
-      <h2>Connector</h2>
       <Show when={!connected()}>
         <button disabled={running()} onClick={connect}>Connect</button>
       </Show>

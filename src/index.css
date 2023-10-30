@@ -1,6 +1,7 @@
 body {
-    background-color: #1a1a1a;
+    background-color: #1f2234;
     color: #fff;
+    margin: 0;
 }
 
 #app {
@@ -15,8 +16,36 @@ body {
     /* padding: 12px 0; */
 }
 
-.flex {
+footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-top: 1px solid #ffffff1a;
+    padding-top: 14px;
+    margin-top: 32px;
+}
+hr {
+    border-top: 1px solid #ffffff1a;
+}
+
+button {
+    background-color: #ffffff1a;
+    border: 1px solid #ffffff1a;
+    color: #fff;
+    padding: 8px 16px;
+    margin-right: 6px;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input {
+    background-color: #ffffff1a;
+    border: 1px solid #ffffff1a;
+    color: #fff;
+    padding: 8px 16px;
+    margin-right: 6px;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    cursor: pointer;
 }
