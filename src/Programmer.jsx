@@ -78,7 +78,7 @@ export const Programmer = () => {
                     {(version) => (
                       <div class="version">
                         <label>
-                          Bitcoinswitch ({device}) ({version})
+                          {data.name} ({device}) ({version})
                         </label>
                         <button disabled={running()} onClick={() => flash(version, device)}>Flash</button>
                       </div>
