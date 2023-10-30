@@ -2,6 +2,7 @@ import { Show, onMount } from "solid-js";
 import { connected, esploader, running, term } from "./index";
 import { Connector } from "./Connector";
 import { Configurator } from "./Configurator";
+import { Hero } from "./Hero";
 import { Programmer } from "./Programmer";
 // import { SerialMonitor } from "./SerialMonitor";
 
@@ -12,9 +13,6 @@ export const App = () => {
   onMount(async () => {
       while (true) {
         if (!connected() || running()) {
-            // if (esploader()) {
-            //     await esploader().transport.device.readable.getReader().releaseLock();
-            // }
             await new Promise((resolve) => setTimeout(resolve, 1000));
             continue;
         }
@@ -34,13 +32,12 @@ export const App = () => {
 
   return (
     <div id="app">
-      <div className="flex">
-          <Connector />
-          <Show when={connected()}>
-            <Programmer />
-            <Configurator />
-          </Show>
-      </div>
+      <Hero />
+      <Connector />
+      <Show when={connected()}>
+        <Programmer />
+        <Configurator />
+      </Show>
       <button style="margin-top: 12px;" onClick={() => term.clear()}>Clear Terminal</button>
     </div>
   );
