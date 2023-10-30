@@ -21,11 +21,14 @@ export const Programmer = () => {
 
   const flash = async (version, device) => {
     console.log("flashing", version, device);
-    // await esploader().change_baud(921600);
     const fileArray = [];
     for (const item of addressesAndFiles) {
       console.log(`Address: ${item.address}, File Name: ${item.fileName}`);
-      const response = await fetch(`/src/firmware/${device}/${version}/${item.fileName}`);
+      let url = `/src/firmware/${device}/${version}/${item.fileName}`;
+      if (item.fileName === "boot_app0.bin") {
+        url = `/src/boot_app0.bin`;
+      }
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

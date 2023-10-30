@@ -48,8 +48,7 @@ export const Configurator = () => {
                 value={element.value}
                 id={element.name}
                 name={element.name}
-                type={element.apply}
-                placeholder={element.placeholder}
+                type={element.type}
               />
             </div>
           )}
