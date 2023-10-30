@@ -32,6 +32,8 @@ add firmware accordingly into `src/firmware/esp32/v0.1.0`
 
 ## config.js
 `src/config.js`
+
+### firmware files
 ```js
 export const addressesAndFiles = [
   {
@@ -52,3 +54,19 @@ export const addressesAndFiles = [
   },
 ];
 ```
+
+### firmware config (elements.json)
+you can define form fields, whichcan be uploaded to the device in serial config mode.
+```js
+export const elements = [
+  {
+    name: "password",
+    type: "ACInput",
+    value: "ToTheMoon1",
+    label: "Password for PoS AP WiFi",
+    pattern: "",
+    placeholder: "Password for PoS AP WiFi",
+    style: "",
+    apply: "text",
+  },
+];
