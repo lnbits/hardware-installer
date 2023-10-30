@@ -23,6 +23,7 @@ export const Configurator = () => {
     }
   };
 
+
   const read = async () => {
     await esploader().transport.write(enc.decode(`/file-read ${configPath}\n`));
   };
@@ -42,6 +43,8 @@ export const Configurator = () => {
       <Show when={connected()}>
         <button onClick={() => setShow(!show())}>Configure</button>
         <Show when={show()}>
+            <button disabled={running()} onClick={upload}>Upload config</button>
+            <button disabled={running()} onClick={read}>Read config</button>
             <For each={config}>
               {(element) => (
                 <div class="element">
@@ -56,8 +59,6 @@ export const Configurator = () => {
                 </div>
               )}
             </For>
-            <button disabled={running()} onClick={upload}>Upload config</button>
-            <button disabled={running()} onClick={read}>Read config</button>
           </Show>
       </Show>
     </div>

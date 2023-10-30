@@ -7,7 +7,7 @@ import { addressesAndFiles } from "./config.js";
 
 export const Programmer = () => {
 
-  const [showFlash, setShowFlash] = createSignal(false);
+  const [show, setShow] = createSignal(false);
 
   const erase = async () => {
     try {
@@ -27,9 +27,9 @@ export const Programmer = () => {
     const fileArray = [];
     for (const item of addressesAndFiles) {
       console.log(`Address: ${item.address}, File Name: ${item.fileName}`);
-      let url = `/src/firmware/${device}/${version}/${item.fileName}`;
+      let url = `/firmware/${device}/${version}/${item.fileName}`;
       if (item.fileName === "boot_app0.bin") {
-        url = `/src/boot_app0.bin`;
+        url = `/boot_app0.bin`;
       }
       const response = await fetch(url);
       if (!response.ok) {
@@ -67,9 +67,9 @@ export const Programmer = () => {
   return (
     <div id="programmer">
       <Show when={connected()}>
+        <button onClick={() => setShow(!show())}>Flash</button>
         <button disabled={running()} onClick={erase}>Erase</button>
-        <button onClick={() => setShowFlash(!showFlash())}>Flash</button>
-        <Show when={showFlash()}>
+        <Show when={show()}>
             <For each={data.devices} fallback={<div>Loading...</div>}>
               {(device) => (
                 <div className="device">
