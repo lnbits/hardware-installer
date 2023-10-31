@@ -1,8 +1,11 @@
 body {
     background-color: #1f2234;
-    color: #fff;
+    color: #eee;
     margin: 0;
+    font-family: Open Sans, sans-serif;
 }
+
+
 
 #app {
     /* text-align: center; */
@@ -16,12 +19,22 @@ body {
     /* padding: 12px 0; */
 }
 
+#markdown {
+    border-radius: 14px;
+    margin: 24px 0 0 0;
+    padding: 6px 24px;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #ddd;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
 footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-top: 1px solid #ffffff1a;
-    padding-top: 14px;
+    padding: 14px 0;
     margin-top: 32px;
 }
 hr {

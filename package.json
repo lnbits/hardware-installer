@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "esptool-js": "^0.3.1",
+    "marked": "^9.1.4",
     "solid-js": "^1.8.4",
     "xterm": "^5.3.0"
   },

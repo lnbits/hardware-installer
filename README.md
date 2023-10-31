@@ -1,21 +1,24 @@
-# install
+# Generic Installer
+## this serves as an example for the `hardware-installer`
+
+## install
 ```console
 npm install
 ```
 
-# run locally
+### run locally
 ```console
 vite serve
 ```
 
-# build production
+### build production
 ```console
 vite build
 ```
 
-# Configuration
+## Configuration
 
-## versions.json
+### versions.json
 configure firmware, devices and verisons
 `src/versions.json`
 ```json
@@ -30,10 +33,10 @@ configure firmware, devices and verisons
 ```
 add firmware accordingly into `src/firmware/esp32/v0.1.0`
 
-## config.js
+### config.js
 `src/config.js`
 
-### firmware files
+#### firmware files
 ```js
 export const addressesAndFiles = [
   {
@@ -55,7 +58,7 @@ export const addressesAndFiles = [
 ];
 ```
 
-### firmware config (elements.json)
+#### firmware config (elements.json)
 you can define form fields, whichcan be uploaded to the device in serial config mode.
 ```js
 export const elements = [
