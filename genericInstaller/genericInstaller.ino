@@ -75,12 +75,13 @@ void setup() {
             delay(500);
             digitalWrite(2, LOW);
         }
+        Serial.println("WiFi connection etablished!");
     }
 }
 
 void loop() {
     while(WiFi.status() != WL_CONNECTED){
-        Serial.println("WiFi disconnected");
+        Serial.println("WiFi disconnected!");
         delay(500);
     }
     digitalWrite(2, LOW);

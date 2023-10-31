@@ -19,6 +19,8 @@ for device in $(jq -r '.devices[]' ./hardware-installer/src/versions.json); do
         wget $RELEASE/$version/$PROJECT_NAME.ino.bin
         wget $RELEASE/$version/$PROJECT_NAME.ino.partitions.bin
         wget $RELEASE/$version/$PROJECT_NAME.ino.bootloader.bin
-        mv $PROJECT_NAME* $INSTALLER_PATH/$device/$version
+        mv $PROJECT_NAME.ino.bin $INSTALLER_PATH/$device/$version
+        mv $PROJECT_NAME.ino.partitions.bin $INSTALLER_PATH/$device/$version
+        mv $PROJECT_NAME.ino.bootloader.bin $INSTALLER_PATH/$device/$version
     done
 done
