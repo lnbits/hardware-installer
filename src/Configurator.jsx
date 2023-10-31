@@ -53,8 +53,6 @@ export const Configurator = () => {
                 Hardware Reset (Configuration Mode)
               </button>
             </div>
-            <button disabled={running()} onClick={upload}>Upload config</button>
-            <button disabled={running()} onClick={read}>Read config</button>
             <For each={config}>
               {(element) => (
                 <div class="element">
@@ -69,6 +67,7 @@ export const Configurator = () => {
                 </div>
               )}
             </For>
+            <button disabled={running()} onClick={upload}>Upload config</button>
           </Show>
       </Show>
     </div>
