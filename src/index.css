@@ -3,6 +3,7 @@ body {
     color: #eee;
     margin: 0;
     font-family: Open Sans, sans-serif;
+    padding-bottom: 240px;
 }
 
 a {
@@ -17,12 +18,25 @@ a:hover {
     margin: auto;
 }
 
-#terminal-wrap {
-    margin-top: 42px;
-    border: 2px solid;
+ol {
+    padding: 0 0 0 24px;
+    line-height: 2;
 }
 
-#markdown {
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#terminal {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.box {
     border-radius: 14px;
     margin: 24px 0 0 0;
     padding: 6px 24px;
@@ -53,6 +67,10 @@ button {
     margin-bottom: 12px;
     border-radius: 4px;
     cursor: pointer;
+}
+
+button:hover {
+    background-color: #ffffff2a;
 }
 
 input {

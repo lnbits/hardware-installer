@@ -38,11 +38,21 @@ export const Configurator = () => {
     });
   };
 
+  const reset = async () => {
+    await esploader().hard_reset();
+  };
+
   return (
     <div id="configurator">
       <Show when={connected()}>
-        <button onClick={() => setShow(!show())}>Configure</button>
+        <h3>Configure Device</h3>
+        <button onClick={() => setShow(!show())}>Show Configuration Options</button>
         <Show when={show()}>
+            <div>
+              <button disabled={running()} onClick={reset}>
+                Hardware Reset (Configuration Mode)
+              </button>
+            </div>
             <button disabled={running()} onClick={upload}>Upload config</button>
             <button disabled={running()} onClick={read}>Read config</button>
             <For each={config}>
