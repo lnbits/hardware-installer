@@ -31,7 +31,7 @@ configure firmware, devices and verisons
   ]
 }
 ```
-add firmware accordingly into `src/firmware/esp32/v0.1.0`
+add firmware accordingly into `src/firmware/esp32/v0.0.0`
 
 ### config.js
 `src/config.js`
@@ -41,11 +41,11 @@ add firmware accordingly into `src/firmware/esp32/v0.1.0`
 export const addressesAndFiles = [
   {
     address: "0x1000",
-    fileName: "bootloader.bin",
+    fileName: "genericInstaller.ino.bootloader.bin",
   },
   {
     address: "0x9000",
-    fileName: "bitcoinSwitch.ino.partitions.bin",
+    fileName: "genericInstaller.ino.partitions.bin",
   },
   {
     address: "0xE000",
@@ -53,7 +53,7 @@ export const addressesAndFiles = [
   },
   {
     address: "0x10000",
-    fileName: "bitcoinSwitch.ino.bin",
+    fileName: "genericInstaller.ino.bin",
   },
 ];
 ```
