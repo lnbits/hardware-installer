@@ -64,12 +64,8 @@ you can define form fields, whichcan be uploaded to the device in serial config 
 export const elements = [
   {
     name: "password",
-    type: "ACInput",
     value: "ToTheMoon1",
     label: "Password for PoS AP WiFi",
-    pattern: "",
-    placeholder: "Password for PoS AP WiFi",
-    style: "",
-    apply: "text",
-  },
+    type: "text",
+  }
 ];
