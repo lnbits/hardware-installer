@@ -1,7 +1,7 @@
 export const addressesAndFiles = [
   {
     address: "0x1000",
-    fileName: "genericInstaller.bootloader.bin",
+    fileName: "genericInstaller.ino.bootloader.bin",
   },
   {
     address: "0x8000",
