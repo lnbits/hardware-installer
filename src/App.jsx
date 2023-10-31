@@ -49,10 +49,16 @@ export const App = () => {
           <li>Configure your device settings by clicking the "Configure Device Options" button</li>
       </ol>
       <div className="box">
-          <Connector />
-          <Show when={connected()}>
-            <Programmer />
-            <Configurator />
+          <Show when={!("serial" in navigator)}>
+            <h2>Browser does not support WebSerial.</h2>
+            <p>WebSerial is only supported in Chromium, Chrome or Edge.</p>
+          </Show>
+          <Show when={"serial" in navigator}>
+              <Connector />
+              <Show when={connected()}>
+                <Programmer />
+                <Configurator />
+              </Show>
           </Show>
       </div>
       <div ref={markdownRef} id="markdown"></div>
