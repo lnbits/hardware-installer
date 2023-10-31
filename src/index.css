@@ -5,10 +5,14 @@ body {
     font-family: Open Sans, sans-serif;
 }
 
-
+a {
+    color: #673ab7;
+}
+a:hover {
+    color: #fff;
+}
 
 #app {
-    /* text-align: center; */
     max-width: 900px;
     margin: auto;
 }
@@ -16,7 +20,6 @@ body {
 #terminal-wrap {
     margin-top: 42px;
     border: 2px solid;
-    /* padding: 12px 0; */
 }
 
 #markdown {
