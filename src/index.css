@@ -38,7 +38,7 @@ header {
 
 .box {
     border-radius: 14px;
-    margin: 24px 0 0 0;
+    margin: 24px 0;
     padding: 6px 24px;
     background-color: rgba(0, 0, 0, 0.1);
     color: #ddd;
@@ -71,6 +71,11 @@ button {
 
 button:hover {
     background-color: #ffffff2a;
+}
+
+button:disabled {
+    background-color: #1c1f2f;
+    cursor: not-allowed;
 }
 
 input {
