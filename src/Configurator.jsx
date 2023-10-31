@@ -50,7 +50,7 @@ export const Configurator = () => {
         <Show when={show()}>
             <div>
               <button disabled={running()} onClick={reset}>
-                Hardware Reset (Configuration Mode)
+                Reset Device (Start Configuration Mode)
               </button>
             </div>
             <For each={config}>
