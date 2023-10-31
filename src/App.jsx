@@ -40,7 +40,7 @@ export const App = () => {
     <div id="app">
       <header>
         <h1>{data.name}</h1>
-        <img width="180" src={logo} alt="LNbits" />
+        <a href="https://lnbits.com" target="_blank"><img width="180" src={logo} alt="LNbits" /></a>
       </header>
       <ol>
           <li>Connect your device to your computer using a USB cable.</li>
