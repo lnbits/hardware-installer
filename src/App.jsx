@@ -5,7 +5,6 @@ import { Connector } from "./Connector";
 import { Configurator } from "./Configurator";
 import { Programmer } from "./Programmer";
 import logo from "./logo.svg";
-// import { SerialMonitor } from "./SerialMonitor";
 
 
 export const App = () => {
