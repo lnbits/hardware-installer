@@ -9,19 +9,6 @@ export const Programmer = () => {
 
   const [show, setShow] = createSignal(false);
 
-  const erase = async () => {
-    try {
-      setRunning(true);
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-      await esploader().erase_flash();
-    } catch (e) {
-      console.error(e);
-      term.writeln(`Error: ${e.message}`);
-    } finally {
-      setRunning(false);
-    }
-  };
-
   const flash = async (version, device) => {
     console.log("flashing", version, device);
     const fileArray = [];
@@ -67,27 +54,23 @@ export const Programmer = () => {
   return (
     <div id="programmer">
       <Show when={connected()}>
-        <button onClick={() => setShow(!show())}>Flash</button>
-        <button disabled={running()} onClick={erase}>Erase</button>
-        <Show when={show()}>
+            <h3>Upload Firmware</h3>
             <For each={data.devices} fallback={<div>Loading...</div>}>
               {(device) => (
                 <div className="device">
-                  <h3>{device}</h3>
                   <For each={data.versions} fallback={<div>Loading...</div>}>
                     {(version) => (
                       <div class="version">
+                        <button disabled={running()} onClick={() => flash(version, device)}>Upload firmware</button>
                         <label>
                           {data.name} ({device}) ({version})
                         </label>
-                        <button disabled={running()} onClick={() => flash(version, device)}>Flash</button>
                       </div>
                     )}
                   </For>
                 </div>
               )}
             </For>
-          </Show>
       </Show>
     </div>
   );

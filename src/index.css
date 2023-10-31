@@ -18,6 +18,11 @@ a:hover {
     margin: auto;
 }
 
+ol {
+    padding: 0 0 0 24px;
+    line-height: 2;
+}
+
 header {
     display: flex;
     justify-content: space-between;
@@ -31,7 +36,7 @@ header {
     bottom: 0;
 }
 
-#markdown {
+.box {
     border-radius: 14px;
     margin: 24px 0 0 0;
     padding: 6px 24px;
@@ -62,6 +67,10 @@ button {
     margin-bottom: 12px;
     border-radius: 4px;
     cursor: pointer;
+}
+
+button:hover {
+    background-color: #ffffff2a;
 }
 
 input {

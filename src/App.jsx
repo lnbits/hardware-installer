@@ -5,6 +5,7 @@ import { Connector } from "./Connector";
 import { Configurator } from "./Configurator";
 import { Programmer } from "./Programmer";
 import logo from "./logo.svg";
+import data from "./versions.json";
 
 
 export const App = () => {
@@ -38,16 +39,23 @@ export const App = () => {
   return (
     <div id="app">
       <header>
-        <h1>Generic Installer</h1>
+        <h1>{data.name}</h1>
         <img width="180" src={logo} alt="LNbits" />
       </header>
-      <p>In order to install LNbits on your hardware, please follow the instructions below.</p>
+      <ol>
+          <li>Connect your device to your computer using a USB cable.</li>
+          <li>Connect the installer to your device by clicking the "Connect to Device" button</li>
+          <li>Upload the firmware to the device by clicking the "Upload Firmware" button</li>
+          <li>Configure your device settings by clicking the "Configure Device Options" button</li>
+      </ol>
+      <div className="box">
+          <Connector />
+          <Show when={connected()}>
+            <Programmer />
+            <Configurator />
+          </Show>
+      </div>
       <div ref={markdownRef} id="markdown"></div>
-      <Connector />
-      <Show when={connected()}>
-        <Programmer />
-        <Configurator />
-      </Show>
       <footer>
         <p>LNbits hardware installer, <a target="_blank" href="https://github.com/lnbits/hardware-installer">github</a></p>
       </footer>
