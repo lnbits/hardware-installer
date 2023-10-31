@@ -11,7 +11,7 @@ export const App = () => {
   let markdownRef;
 
   onMount(async () => {
-      const response = await fetch("README.md");
+      const response = await fetch("INSTALLER.md");
       const text = await response.text();
       markdownRef.innerHTML = marked(text);
 
@@ -37,16 +37,18 @@ export const App = () => {
 
   return (
     <div id="app">
-      <button style="margin-top: 12px;" onClick={() => term.clear()}>Clear Terminal</button>
-      <h2>Installer</h2>
+      <header>
+        <h1>Generic Installer</h1>
+        <img width="180" src={logo} alt="LNbits" />
+      </header>
+      <p>In order to install LNbits on your hardware, please follow the instructions below.</p>
+      <div ref={markdownRef} id="markdown"></div>
       <Connector />
       <Show when={connected()}>
         <Programmer />
         <Configurator />
       </Show>
-      <div ref={markdownRef} id="markdown"></div>
       <footer>
-        <img width="200" src={logo} alt="LNbits" />
         <p>LNbits hardware installer, <a target="_blank" href="https://github.com/lnbits/hardware-installer">github</a></p>
       </footer>
     </div>

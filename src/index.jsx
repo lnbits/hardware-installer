@@ -11,7 +11,7 @@ export const [running, setRunning] = createSignal(false);
 export const [esploader, setEsploader] = createSignal(null);
 
 
-export const term = new Terminal({ cols: 120, rows: 21 });
+export const term = new Terminal({ cols: 120, rows: 14 });
 term.open(document.getElementById("terminal"));
 term.write("Welcome to the LNbits hardware installer!");
 
