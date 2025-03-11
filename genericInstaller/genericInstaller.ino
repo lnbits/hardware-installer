@@ -1,3 +1,5 @@
+#include <FS.h>
+#include <SPIFFS.h>
 #include <ArduinoJson.h>
 
 int config_led_pin;
