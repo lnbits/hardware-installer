@@ -9,23 +9,42 @@ export const Configurator = () => {
   const [show, setShow] = createSignal(false);
 
   const upload = async () => {
+    await esploader().hard_reset();
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     if (esploader().transport.device.writable) {
       const preparedConfig = JSON.stringify(config, null, 2);
       const writer = esploader().transport.device.writable.getWriter();
-        writer.write(enc.encode(`/file-remove ${configPath}\n`));
+        writer.write(enc.encode(`/file-remove\n`));
         const lines = preparedConfig.split("\n");
         for (const line of lines) {
-          writer.write(enc.encode(`/file-append ${configPath} ${line}\n`));
-          await new Promise((resolve) => setTimeout(resolve, 100));
+          writer.write(enc.encode(`/file-append ${line}\n`));
+          await new Promise((resolve) => setTimeout(resolve, 200));
         }
+        writer.write(enc.encode(`/config-done\n`));
+        await new Promise((resolve) => setTimeout(resolve, 200));
         writer.releaseLock();
         term.writeln("Config upload complete!");
     }
   };
 
 
+  const deleteConfig = async () => {
+    await esploader().hard_reset();
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const writer = esploader().transport.device.writable.getWriter();
+    await writer.write(enc.encode(`/file-remove\n`));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await writer.write(enc.encode(`/config-done\n`));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    writer.releaseLock();
+  };
+
+
   const read = async () => {
-    await esploader().transport.write(enc.decode(`/file-read ${configPath}\n`));
+    const reader = esploader().transport.device.readable.getReader();
+    await esploader().transport.write(enc.encode(`/file-read\n`));
+    console.log("reading config");
+    console.log("config", reader.read());
   };
 
   const updateFormValue = (e) => {
@@ -38,21 +57,12 @@ export const Configurator = () => {
     });
   };
 
-  const reset = async () => {
-    await esploader().hard_reset();
-  };
-
   return (
     <div id="configurator">
       <Show when={connected()}>
         <h3>Configure Device</h3>
         <button onClick={() => setShow(!show())}>Show Configuration Options</button>
         <Show when={show()}>
-            <div>
-              <button disabled={running()} onClick={reset}>
-                Reset Device (Start Configuration Mode)
-              </button>
-            </div>
             <For each={config}>
               {(element) => (
                 <div class="element">
@@ -68,6 +78,7 @@ export const Configurator = () => {
               )}
             </For>
             <button disabled={running()} onClick={upload}>Upload config</button>
+            <button disabled={running()} onClick={deleteConfig}>Delete config</button>
           </Show>
       </Show>
     </div>

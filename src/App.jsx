@@ -46,7 +46,7 @@ export const App = () => {
           <li>Connect your device to your computer using a USB cable.</li>
           <li>Connect the installer to your device by clicking the "Connect to Device" button</li>
           <li>Upload the firmware to the device by clicking the "Upload Firmware" button</li>
-          <li>Configure your device settings by clicking the "Configure Device Options" button</li>
+          <li>Upload configuration to your device settings by clicking the "Configure Device Options" button</li>
       </ol>
       <div className="box">
           <Show when={!("serial" in navigator)}>

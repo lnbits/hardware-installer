@@ -21,6 +21,12 @@ export const configPath = "elements.json";
 
 export const elements = [
   {
+    name: "config_led_pin",
+    value: "",
+    label: "LED pin",
+    type: "text",
+  },
+  {
     name: "config_ssid",
     value: "",
     label: "WiFi SSID",
