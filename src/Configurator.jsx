@@ -39,6 +39,18 @@ export const Configurator = () => {
   };
 
 
+  const deleteConfig = async () => {
+    await esploader().hard_reset();
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const writer = esploader().transport.device.writable.getWriter();
+    await writer.write(enc.encode(`/file-remove\n`));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await writer.write(enc.encode(`/config-done\n`));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    writer.releaseLock();
+  };
+
+
   const read = async () => {
     await reset();
     const writer = esploader().transport.device.writable.getWriter();
