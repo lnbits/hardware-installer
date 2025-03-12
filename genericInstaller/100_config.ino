@@ -118,12 +118,12 @@ bool executeConfig() {
     return true;
   }
   if (data == "/file-remove") {
-    FlashFS.remove(CONFIG_FILE);
+    SPIFFS.remove(CONFIG_FILE);
   }
   if (data.startsWith("/file-append")) {
-    File file = FlashFS.open(CONFIG_FILE, FILE_APPEND);
+    File file = SPIFFS.open(CONFIG_FILE, FILE_APPEND);
     if (!file) {
-      file = FlashFS.open(CONFIG_FILE, FILE_WRITE);
+      file = SPIFFS.open(CONFIG_FILE, FILE_WRITE);
     }
     if (!file) {
       Serial.println("Failed to open file for writing.");
