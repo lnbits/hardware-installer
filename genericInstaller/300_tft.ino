@@ -1,6 +1,6 @@
 #ifdef TDISPLAY
+#include <TFT_eSPI.h>
 TFT_eSPI tft = TFT_eSPI(TFT_WIDTH, TFT_HEIGHT);
-
 void setupTFT() {
   tft.init();
   Serial.println("TFT: " + String(TFT_WIDTH) + "x" + String(TFT_HEIGHT));
@@ -12,13 +12,22 @@ void setupTFT() {
   Serial.println("TFT pin RST: " + String(TFT_RST));
   Serial.println("TFT pin BL: " + String(TFT_BL));
   tft.setRotation(1);
-  tft.invertDisplay(false);
-  tft.fillScreen(TFT_GREEN);
-  tft.setTextColor(TFT_WHITE, TFT_GREEN);
-
-  String text1 = "Hello World!";
-  tft.setTextSize(3);
-  tft.setCursor(tft.textWidth(text1) / 2, 21);
-  tft.println(text1);
+  tft.invertDisplay(true);
+}
+void printTFT(String message, int x, int y) {
+  tft.setTextSize(2);
+  tft.setTextColor(TFT_WHITE);
+  tft.setCursor(x, y);
+  tft.println(message);
+}
+void clearTFT() {
+  tft.fillScreen(TFT_BLACK);
+}
+#else
+void printTFT(String message) {
+  Serial.println("skipping TFT print: " + message);
+}
+void clearTFT() {
+  Serial.println("skipping TFT clear");
 }
 #endif

@@ -1,3 +1,5 @@
+#include <WiFi.h>
+
 void setupWifi() {
     WiFi.begin(config_ssid.c_str(), config_password.c_str());
     Serial.print("Connecting to WiFi.");
@@ -11,6 +13,7 @@ void setupWifi() {
     }
     Serial.println();
     Serial.println("WiFi connection etablished!");
+    printTFT("WiFi connected!", 21, 69);
 }
 
 void loopWifi() {

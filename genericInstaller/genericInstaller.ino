@@ -1,9 +1,3 @@
-#include <FS.h>
-#include <SPIFFS.h>
-fs::SPIFFSFS &FlashFS = SPIFFS;
-
-#include <TFT_eSPI.h>
-#include <WiFi.h>
 #include <ArduinoJson.h>
 
 int config_led_pin;
