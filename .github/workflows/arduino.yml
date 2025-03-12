@@ -31,6 +31,7 @@ jobs:
             - --warnings="none"
           libraries: |
             - name: ArduinoJson
+            - name: TFT_eSPI
 
       - uses: actions/upload-artifact@v4
         with:
