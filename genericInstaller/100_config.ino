@@ -10,7 +10,7 @@
 #define CONFIG_FILE "/elements.json"
 
 // device specific configuration / defaults
-#define CONFIG_LED_PIN 4
+#define CONFIG_LED_PIN 2
 #define CONFIG_SSID "my_wifi_ssid"
 #define CONFIG_PASSWORD "my_wifi_password"
 
@@ -25,14 +25,11 @@ void setupConfig(){
     Serial.println("SSID password: " + config_password);
 }
 #else
-#include <FS.h>
-#include <SPIFFS.h>
 
 void setupConfig(){
     SPIFFS.begin(true);
     // first give the installer a chance to delete configuration file
     executeConfigBoot();
-
     String fileContent = readConfig();
     // file does not exist, so we will enter endless config mode
     if (fileContent == "") {
@@ -53,7 +50,7 @@ void setupConfig(){
 }
 
 String readConfig() {
-    File paramFile = SPIFFS.open(CONFIG_FILE, FILE_READ);
+    File paramFile = FlashFS.open(CONFIG_FILE, FILE_READ);
     if (!paramFile) {
         return "";
     }

@@ -1,3 +1,9 @@
+#include <FS.h>
+#include <SPIFFS.h>
+fs::SPIFFSFS &FlashFS = SPIFFS;
+
+#include <TFT_eSPI.h>
+#include <WiFi.h>
 #include <ArduinoJson.h>
 
 int config_led_pin;
@@ -7,7 +13,9 @@ String config_password;
 
 void setup() {
     Serial.begin(115200);
-
+    #ifdef TDISPLAY
+    setupTFT();
+    #endif
     setupConfig();
     setupWifi();
     pinMode(config_led_pin, OUTPUT); // To blink on board LED
