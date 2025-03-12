@@ -25,6 +25,8 @@ void setupConfig(){
     Serial.println("SSID password: " + config_password);
 }
 #else
+#include <FS.h>
+#include <SPIFFS.h>
 
 void setupConfig(){
     SPIFFS.begin(true);
@@ -50,7 +52,7 @@ void setupConfig(){
 }
 
 String readConfig() {
-    File paramFile = FlashFS.open(CONFIG_FILE, FILE_READ);
+    File paramFile = SPIFFS.open(CONFIG_FILE, FILE_READ);
     if (!paramFile) {
         return "";
     }
@@ -78,6 +80,8 @@ String getJsonValue(JsonDocument &doc, const char* name, String defaultValue)
 
 void executeConfigBoot() {
     Serial.println("Entering boot mode. Waiting for " + String(BOOTUP_TIMEOUT) + " seconds.");
+    clearTFT();
+    printTFT("BOOT MODE", 21, 21);
     int counter = BOOTUP_TIMEOUT + 1;
     while (counter-- > 0) {
         if (Serial.available() == 0) {
@@ -92,10 +96,15 @@ void executeConfigBoot() {
     Serial.println("Exiting boot mode.");
     Serial.print("Welcome to the LNbits generic installer!");
     Serial.println(" (" + String(VERSION) + ")");
+    clearTFT();
+    printTFT("GENERIC", 21, 21);
+    printTFT(String(VERSION), 21, 42);
 }
 
 void executeConfigForever() {
     Serial.println("Entering config mode. until we receive /config-done.");
+    clearTFT();
+    printTFT("CONFIG", 21, 21);
     bool done = false;
     while (true) {
         done = executeConfig();
