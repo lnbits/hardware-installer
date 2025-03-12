@@ -24,7 +24,7 @@ void clearTFT() {
   tft.fillScreen(TFT_BLACK);
 }
 #else
-void printTFT(String message) {
+void printTFT(String message, int x, int y) {
   Serial.println("skipping TFT print: " + message);
 }
 void clearTFT() {
