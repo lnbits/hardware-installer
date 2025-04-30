@@ -74,22 +74,28 @@ export const elements = [
     value: "ToTheMoon1",
     label: "Password for PoS AP WiFi",
     type: "text",
-  }
+  },
 ];
 ```
 
-
 ## Development
+
 ### Helper scripts
+
 install dependencies and libraries
+
 ```console
 ./install.sh
 ```
+
 compile for device
+
 ```console
 ./build.sh esp32
-````
+```
+
 debug (serial port, device type)
+
 ```console
 ./debug.sh /dev/ttyACM0 esp32
 ```
@@ -97,14 +103,19 @@ debug (serial port, device type)
 ### arduino-cli
 
 compiling
+
 ```console
 arduino-cli compile --build-path build --fqbn esp32:esp32:esp32 bitcoinSwitch
 ```
+
 monitoring
+
 ```console
 arduino-cli monitor -p /dev/ttyUSB1 -c baudrate=115200
 ```
+
 uploading
+
 ```console
 arduino-cli upload --fqbn esp32:esp32:esp32 --input-dir build -p /dev/ttyUSB1
 ```
