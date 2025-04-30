@@ -1,3 +1,6 @@
 node_modules
 firmware
-build
+build*
+src/config.js
+!build-webinstaller.sh
+!build.sh
