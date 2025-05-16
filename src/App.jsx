@@ -45,6 +45,7 @@ export const App = () => {
       <ol>
           <li>Connect your device to your computer using a USB cable.</li>
           <li>Connect the installer to your device by clicking the "Connect to Device" button</li>
+          <li>You may need to press the "boot" button on the ESP32 to start the connection</li>
           <li>Upload the firmware to the device by clicking the "Upload Firmware" button</li>
           <li>Configure your device settings by clicking the "Configure Device Options" button</li>
       </ol>
