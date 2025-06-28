@@ -47,7 +47,7 @@ export const App = () => {
           <li>Connect the installer to your device by clicking the "Connect to Device" button</li>
           <li>You may need to press the "boot" button on the ESP32 to start the connection</li>
           <li>Upload the firmware to the device by clicking the "Upload Firmware" button</li>
-          <li>Configure your device settings by clicking the "Configure Device Options" button</li>
+          <li>Upload configuration to your device settings by clicking the "Configure Device Options" button</li>
       </ol>
       <div className="box">
           <Show when={!("serial" in navigator)}>
