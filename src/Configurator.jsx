@@ -54,7 +54,6 @@ export const Configurator = () => {
               Reset Device (Start Configuration Mode)
             </button>
           </div>
-          <h2>Settings</h2>
           <For each={config}>
             {(element) => {
               if (element.type !== "heading") {
@@ -74,7 +73,7 @@ export const Configurator = () => {
               else{
                 return (
                   <div class="element">
-                    <h4>{element.label}</h4>
+                    <strong><u>{element.label}</u></strong>
                   </div>
                 );
             }
