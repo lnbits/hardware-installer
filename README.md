@@ -8,12 +8,12 @@ npm install
 
 ### run locally
 ```console
-vite serve
+npx vite serve
 ```
 
 ### build production
 ```console
-vite build
+npx vite build
 ```
 
 ## Configuration
