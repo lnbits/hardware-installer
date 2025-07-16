@@ -21,6 +21,10 @@ export const configPath = "elements.json";
 
 export const elements = [
   {
+    type: "heading",
+    label: "WiFi Settings",
+  },
+  {
     name: "config_ssid",
     value: "",
     label: "WiFi SSID",

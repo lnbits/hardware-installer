@@ -33,7 +33,7 @@ export const Configurator = () => {
     const value = e.currentTarget.value;
     const name = e.currentTarget.name;
     config.forEach((element) => {
-      if (element.name === name) {
+      if (element.name === name && element.type !== "heading") {
         element.value = value;
       }
     });
@@ -54,29 +54,30 @@ export const Configurator = () => {
               Reset Device (Start Configuration Mode)
             </button>
           </div>
-          <p>poo </p>
+          <h2>Settings</h2>
           <For each={config}>
             {(element) => {
-              if (element.type === "heading") {
+              if (element.type !== "heading") {
+                return (
+                  <div class="element">
+                    <label for={element.name}>{element.label}</label> <br />
+                    <input
+                      onChange={updateFormValue}
+                      value={element.value || ""}
+                      id={element.name}
+                      name={element.name}
+                      type={element.type}
+                    />
+                  </div>
+                );
+              }
+              else{
                 return (
                   <div class="element">
                     <h4>{element.label}</h4>
                   </div>
                 );
-              }
-
-              return (
-                <div class="element">
-                  <label for={element.name}>{element.label}</label> <br />
-                  <input
-                    onChange={updateFormValue}
-                    value={element.value || ""}
-                    id={element.name}
-                    name={element.name}
-                    type={element.type}
-                  />
-                </div>
-              );
+            }
             }}
           </For>
           <button disabled={running()} onClick={upload}>
