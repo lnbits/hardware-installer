@@ -54,23 +54,30 @@ export const Configurator = () => {
               Reset Device (Start Configuration Mode)
             </button>
           </div>
+          <p>poo </p>
           <For each={config}>
-            {(element) =>
-              element.type === "heading" ? (
-                <h4 class="element-heading">{element.label}</h4>
-              ) : (
+            {(element) => {
+              if (element.type === "heading") {
+                return (
+                  <div class="element">
+                    <h4>{element.label}</h4>
+                  </div>
+                );
+              }
+
+              return (
                 <div class="element">
                   <label for={element.name}>{element.label}</label> <br />
                   <input
                     onChange={updateFormValue}
-                    value={element.value}
+                    value={element.value || ""}
                     id={element.name}
                     name={element.name}
                     type={element.type}
                   />
                 </div>
-              )
-            }
+              );
+            }}
           </For>
           <button disabled={running()} onClick={upload}>
             Upload config
