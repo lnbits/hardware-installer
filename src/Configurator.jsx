@@ -59,9 +59,9 @@ export const Configurator = () => {
               if (element.type !== "heading") {
                 return (
                   <div class="element">
-                    <label style="padding-left: 2em;" for={element.name}>{element.label}</label> <br />
+                    <label style="padding-left: 1em;" for={element.name}>{element.label}</label> <br />
                     <input
-                      style="padding-left: 2em;"
+                      style="padding-left: 1em;"
                       onChange={updateFormValue}
                       value={element.value || ""}
                       id={element.name}
@@ -74,6 +74,7 @@ export const Configurator = () => {
               else{
                 return (
                   <div class="element">
+                    <br/>
                     <strong>{element.label}</strong>
                   </div>
                 );
