@@ -25,6 +25,12 @@ export const elements = [
     label: "WiFi Settings",
   },
   {
+    name: "config_led_pin",
+    value: "",
+    label: "LED pin",
+    type: "text",
+  },
+  {
     name: "config_ssid",
     value: "",
     label: "WiFi SSID",

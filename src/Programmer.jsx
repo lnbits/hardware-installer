@@ -1,4 +1,4 @@
-import { createSignal, For, Show } from "solid-js";
+import { For, Show } from "solid-js";
 import { esploader, term, connected, running, setRunning } from "./index";
 
 import data from "./versions.json";
@@ -6,8 +6,6 @@ import { addressesAndFiles } from "./config.js";
 
 
 export const Programmer = () => {
-
-  const [show, setShow] = createSignal(false);
 
   const flash = async (version, device) => {
     console.log("flashing", version, device);
@@ -33,7 +31,8 @@ export const Programmer = () => {
     }
     try {
       setRunning(true);
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      await esploader().transport.run_stub();
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       await esploader().write_flash({
         fileArray: fileArray,
           flashSize: "keep",
@@ -51,10 +50,28 @@ export const Programmer = () => {
     }
   };
 
+  const erase = async () => {
+    try {
+      setRunning(true);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await esploader().erase_flash();
+    } catch (e) {
+      console.error(e);
+      term.writeln(`Error: ${e.message}`);
+    } finally {
+      setRunning(false);
+    }
+  };
+
   return (
     <div id="programmer">
       <Show when={connected()}>
             <h3>Upload Firmware</h3>
+            <Show when={connected()}>
+              <button disabled={running()} onClick={erase}>
+                Erase Firmware
+              </button>
+            </Show>
             <For each={data.devices} fallback={<div>Loading...</div>}>
               {(device) => (
                 <div className="device">

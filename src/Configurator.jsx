@@ -1,89 +1,98 @@
-import { createSignal, For, Show } from "solid-js";
-import { connected, esploader, running, term } from "./index";
-import { elements, configPath } from "./config";
+import { For, Show } from "solid-js";
+import { config, setConfig, connected, esploader, running } from "./index";
 
 export const Configurator = () => {
-  let config = elements;
   let enc = new TextEncoder();
 
-  const [show, setShow] = createSignal(false);
-
   const upload = async () => {
+    await reset();
     if (esploader().transport.device.writable) {
       // Filter out heading elements before uploading
-      const uploadConfig = config.filter((e) => e.type !== "heading");
+      const uploadConfig = config().filter((e) => e.type !== "heading");
       const preparedConfig = JSON.stringify(uploadConfig, null, 2);
       const writer = esploader().transport.device.writable.getWriter();
-      writer.write(enc.encode(`/file-remove ${configPath}\n`));
+      writer.write(enc.encode(`/file-remove\n`));
       const lines = preparedConfig.split("\n");
       for (const line of lines) {
-        writer.write(enc.encode(`/file-append ${configPath} ${line}\n`));
+        writer.write(enc.encode(`/file-append ${line}\n`));
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
+      await writer.write(enc.encode(`/config-done\n`));
+      await new Promise((resolve) => setTimeout(resolve, 300));
       writer.releaseLock();
-      term.writeln("Config upload complete!");
     }
   };
 
+  const reset = async () => {
+    await esploader().hard_reset();
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  };
+
+  const deleteConfig = async () => {
+    await reset();
+    const writer = esploader().transport.device.writable.getWriter();
+    await writer.write(enc.encode(`/file-remove\n`));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await writer.write(enc.encode(`/config-done\n`));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    writer.releaseLock();
+  };
+
+
   const read = async () => {
-    await esploader().transport.write(enc.decode(`/file-read ${configPath}\n`));
+    await reset();
+    const writer = esploader().transport.device.writable.getWriter();
+    await writer.write(enc.encode(`/file-read\n`));
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await writer.write(enc.encode(`/config-done\n`));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    writer.releaseLock();
   };
 
   const updateFormValue = (e) => {
     const value = e.currentTarget.value;
     const name = e.currentTarget.name;
-    config.forEach((element) => {
+    const cfg = config()
+    cfg.forEach((element) => {
       if (element.name === name && element.type !== "heading") {
         element.value = value;
       }
     });
-  };
-
-  const reset = async () => {
-    await esploader().hard_reset();
+    setConfig(null)
+    setConfig(cfg)
   };
 
   return (
     <div id="configurator">
       <Show when={connected()}>
         <h3>Configure Device</h3>
-        <button onClick={() => setShow(!show())}>Show Configuration Options</button>
-        <Show when={show()}>
-          <div>
-            <button disabled={running()} onClick={reset}>
-              Reset Device (Start Configuration Mode)
-            </button>
-          </div>
-          <For each={config}>
-            {(element) => {
-              if (element.type !== "heading") {
-                return (
-                  <div style="padding-left: 5px" class="element">
-                    <label for={element.name}>{element.label}: </label>
-                    <input
-                      onChange={updateFormValue}
-                      value={element.value || ""}
-                      id={element.name}
-                      name={element.name}
-                      type={element.type}
-                    />
-                  </div>
-                );
-              }
-              else {
-                return (
+        <button disabled={running()} onClick={upload}>Upload config</button>
+        <button disabled={running()} onClick={read}>Read config</button>
+        <button disabled={running()} onClick={deleteConfig}>Delete config</button>
+        <For each={config()}>
+          {(element) => (
+            <>
+                <Show when={element.type === "heading"}>
                   <div style="padding-bottom: 10px;" class="element">
                     <br />
                     <strong>{element.label}</strong>
                   </div>
-                );
-              }
-            }}
-          </For>
-          <button disabled={running()} onClick={upload}>
-            Upload config
-          </button>
-        </Show>
+                </Show>
+                <Show when={element.type !== "heading"}>
+                    <div class="element">
+                      <label for={element.name}>{element.label}</label> <br />
+                      <input
+                        onChange={updateFormValue}
+                        value={element.value}
+                        id={element.name}
+                        name={element.name}
+                        type={element.type}
+                      />
+                    </div>
+                </Show>
+            </>
+          )}
+        </For>
       </Show>
     </div>
   );

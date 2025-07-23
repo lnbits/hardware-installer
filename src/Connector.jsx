@@ -2,10 +2,8 @@ import { ESPLoader, Transport } from "esptool-js";
 import {
   term,
   running,
-  setRunning,
   connected,
   setConnected,
-  esploader,
   setEsploader,
 } from "./index";
 
@@ -32,61 +30,19 @@ export const Connector = () => {
       await esploader.main_fn();
       setEsploader(esploader);
       setConnected(true);
+      await esploader.hard_reset();
     } catch (e) {
       console.error(e);
       term.writeln(`Error: ${e.message}`);
-    }
-  };
-
-  const disconnect = async () => {
-    await esploader().transport.disconnect();
-    await esploader().transport.waitForUnlock(1500);
-    setConnected(false);
-    setEsploader(null);
-    term.clear();
-  };
-
-  const reconnect = async () => {
-    setRunning(true);
-    await esploader().transport.waitForUnlock(1500);
-    await esploader().transport.disconnect();
-    await esploader().transport.waitForUnlock(1500);
-    term.clear();
-    await esploader().connect();
-    await esploader().run_stub();
-    setRunning(false);
-  };
-
-  const erase = async () => {
-    try {
-      setRunning(true);
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-      await esploader().erase_flash();
-    } catch (e) {
-      console.error(e);
-      term.writeln(`Error: ${e.message}`);
-    } finally {
-      setRunning(false);
     }
   };
 
   return (
     <div id="connector">
-      <h3>Device Connection</h3>
       <Show when={!connected()}>
+        <h3>Device Connection</h3>
         <button disabled={running()} onClick={connect}>
           Connect to Device
-        </button>
-      </Show>
-      <Show when={connected()}>
-        <button disabled={running()} onClick={disconnect}>
-          Disconnect from Device
-        </button>
-        <button disabled={running()} onClick={reconnect}>
-          Reconnect
-        </button>
-        <button disabled={running()} onClick={erase}>
-          Erase Firmware
         </button>
       </Show>
     </div>
