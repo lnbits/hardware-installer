@@ -10,7 +10,7 @@
 #define CONFIG_FILE "/elements.json"
 
 // device specific configuration / defaults
-#define CONFIG_LED_PIN 4
+#define CONFIG_LED_PIN 2
 #define CONFIG_SSID "my_wifi_ssid"
 #define CONFIG_PASSWORD "my_wifi_password"
 
@@ -32,7 +32,6 @@ void setupConfig(){
     SPIFFS.begin(true);
     // first give the installer a chance to delete configuration file
     executeConfigBoot();
-
     String fileContent = readConfig();
     // file does not exist, so we will enter endless config mode
     if (fileContent == "") {
@@ -81,6 +80,8 @@ String getJsonValue(JsonDocument &doc, const char* name, String defaultValue)
 
 void executeConfigBoot() {
     Serial.println("Entering boot mode. Waiting for " + String(BOOTUP_TIMEOUT) + " seconds.");
+    clearTFT();
+    printTFT("BOOT MODE", 21, 21);
     int counter = BOOTUP_TIMEOUT + 1;
     while (counter-- > 0) {
         if (Serial.available() == 0) {
@@ -95,10 +96,15 @@ void executeConfigBoot() {
     Serial.println("Exiting boot mode.");
     Serial.print("Welcome to the LNbits generic installer!");
     Serial.println(" (" + String(VERSION) + ")");
+    clearTFT();
+    printTFT("GENERIC", 21, 21);
+    printTFT(String(VERSION), 21, 42);
 }
 
 void executeConfigForever() {
     Serial.println("Entering config mode. until we receive /config-done.");
+    clearTFT();
+    printTFT("CONFIG", 21, 21);
     bool done = false;
     while (true) {
         done = executeConfig();

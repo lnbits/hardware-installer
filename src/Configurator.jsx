@@ -38,7 +38,6 @@ export const Configurator = () => {
     writer.releaseLock();
   };
 
-
   const read = async () => {
     await reset();
     const writer = esploader().transport.device.writable.getWriter();
