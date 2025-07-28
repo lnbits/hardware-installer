@@ -7,7 +7,7 @@ String config_password;
 
 void setup() {
     Serial.begin(115200);
-    #ifdef TDISPLAY
+    #ifdef TFT
     setupTFT();
     #endif
     setupConfig();
