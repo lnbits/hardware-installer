@@ -1,5 +1,6 @@
 // do not change the version manually or move the #define it will be replaced during release
 #define VERSION "v0.0.0"
+#define NAME "GenericExample"
 
 // uncomment if you dont want to use the configuration file
 //#define HARDCODED
@@ -94,10 +95,10 @@ void executeConfigBoot() {
         executeConfigForever();
     }
     Serial.println("Exiting boot mode.");
-    Serial.print("Welcome to the LNbits generic installer!");
+    Serial.print("Welcome to the LNbits " + String(NAME) + "!");
     Serial.println(" (" + String(VERSION) + ")");
     clearTFT();
-    printTFT("GENERIC", 21, 21);
+    printTFT(String(NAME), 21, 21);
     printTFT(String(VERSION), 21, 42);
 }
 
