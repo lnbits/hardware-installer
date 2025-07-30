@@ -1,5 +1,5 @@
 #!/bin/sh
-PROJECT_NAME=genericExample
+PROJECT_NAME=genericInstaller
 RELEASE=https://github.com/lnbits/hardware-installer/releases/download
 INSTALLER_REPO=https://github.com/lnbits/hardware-installer
 INSTALLER_PATH=./hardware-installer/public/firmware
