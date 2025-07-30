@@ -1,6 +1,7 @@
 import { Show, onMount } from "solid-js";
 import { marked } from "marked";
 import { connected, esploader, running, term } from "./index";
+import { elements } from "./config";
 import { Connector } from "./Connector";
 import { Configurator } from "./Configurator";
 import { Programmer } from "./Programmer";
@@ -59,6 +60,9 @@ export const App = () => {
               <Show when={connected()}>
                 <Programmer />
                 <Configurator />
+                <Show when={elements.length > 0}>
+                    <Configurator />
+                </Show>
               </Show>
           </Show>
       </div>
