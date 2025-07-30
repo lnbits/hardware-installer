@@ -10,10 +10,12 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@xterm/addon-fit": "^0.10.0",
     "esptool-js": "^0.3.1",
     "marked": "^9.1.4",
     "solid-js": "^1.8.4",
-    "xterm": "^5.3.0"
+    "xterm": "^5.3.0",
+    "xterm-addon-fit": "^0.8.0"
   },
   "devDependencies": {
     "vite": "^6.3.5",

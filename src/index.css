@@ -30,12 +30,46 @@ header {
 }
 
 #terminal {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
-
+    background: black;
+    color: lime;
+    padding: 8px;
+    font-family: monospace;
+    overflow: auto;
+    z-index: 1000;
+    border-top: 1px solid #444;
+  }
+  
+  /* Small screens (default): terminal at bottom */
+  @media (max-width: 1024px) {
+    #terminal {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 200px;
+    }
+  
+    #app {
+      padding-bottom: 220px; /* prevent overlap */
+    }
+  }
+  
+  /* Large screens: terminal on the right */
+  @media (min-width: 1025px) {
+    #terminal {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 35vw;
+      height: 100vh;
+      border-left: 1px solid #444;
+    }
+  
+    #app {
+      margin-right: 40vw; /* prevent overlap */
+    }
+  }
+  
 .box {
     border-radius: 14px;
     margin: 24px 0;
