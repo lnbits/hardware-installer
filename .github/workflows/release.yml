@@ -48,6 +48,7 @@ jobs:
           for device in $devices; do
               sh build.sh $device
               mv build/genericInstaller.ino.bin ./build/genericInstaller-$device.ino.bin
+              echo "build/genericInstaller.ino.bin ./build/genericInstaller-$device.ino.bin"
               mv build/genericInstaller.ino.partitions.bin ./build/genericInstaller-$device.ino.partitions.bin
               mv build/genericInstaller.ino.bootloader.bin ./build/genericInstaller-$device.ino.bootloader.bin
           done
@@ -61,6 +62,7 @@ jobs:
           uploads=""
           for device in $devices; do
               uploads="$uploads ./build/genericInstaller-$device.ino.bin"
+              echo $uploads
               uploads="$uploads ./build/genericInstaller-$device.ino.partitions.bin"
               uploads="$uploads ./build/genericInstaller-$device.ino.bootloader.bin"
           done
