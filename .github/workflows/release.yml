@@ -48,11 +48,11 @@ jobs:
           uploads=""
           for device in $devices; do
               sh build.sh $device
-              mv build/genericInstaller.ino.bin ./build/genericInstaller-$device.ino.bin
-              uploads="$uploads ./build/genericInstaller-$device.ino.bin"
-              mv build/genericInstaller.ino.partitions.bin ./build/genericInstaller-$device.ino.partitions.bin
-              uploads="$uploads ./build/genericInstaller-$device.ino.partitions.bin"
-              mv build/genericInstaller.ino.bootloader.bin ./build/genericInstaller-$device.ino.bootloader.bin
-              uploads="$uploads ./build/genericInstaller-$device.ino.bootloader.bin"
+              mv build/genericInstaller.ino.bin ./genericInstaller-$device.ino.bin
+              uploads="$uploads ./genericInstaller-$device.ino.bin
+              mv build/genericInstaller.ino.partitions.bin ./genericInstaller-$device.ino.partitions.bin
+              uploads="$uploads ./genericInstaller-$device.ino.partitions.bin"
+              mv build/genericInstaller.ino.bootloader.bin ./genericInstaller-$device.ino.bootloader.bin
+              uploads="$uploads ./genericInstaller-$device.ino.bootloader.bin"
           done
           gh release create "$tag" --generate-notes $uploads
