@@ -35,9 +35,9 @@ export const Programmer = () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       await esploader().write_flash({
         fileArray: fileArray,
-          flashSize: "keep",
-          eraseAll: false,
-          compress: true,
+        flashSize: "keep",
+        eraseAll: false,
+        compress: true,
       });
       await new Promise((resolve) => setTimeout(resolve, 100));
       await esploader().transport.setDTR(false);

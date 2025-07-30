@@ -7,7 +7,9 @@ String config_password;
 
 void setup() {
     Serial.begin(115200);
-
+    #ifdef TFT
+    setupTFT();
+    #endif
     setupConfig();
     setupWifi();
     pinMode(config_led_pin, OUTPUT); // To blink on board LED

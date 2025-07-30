@@ -13,6 +13,7 @@ void setupWifi() {
     }
     Serial.println();
     Serial.println("WiFi connection etablished!");
+    printTFT("WiFi connected!", 21, 69);
 }
 
 void loopWifi() {
