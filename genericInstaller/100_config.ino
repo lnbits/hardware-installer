@@ -1,5 +1,5 @@
 // do not change the version manually or move the #define it will be replaced during release
-#define VERSION "v0.0.0"
+#define VERSION "v0.1.0"
 #define NAME "GenericExample"
 
 // uncomment if you dont want to use the configuration file
