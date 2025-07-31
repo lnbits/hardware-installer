@@ -30,7 +30,6 @@ export const Connector = () => {
       await esploader.main_fn();
       setEsploader(esploader);
       setConnected(true);
-      await esploader.hard_reset();
     } catch (e) {
       console.error(e);
       term.writeln(`Error: ${e.message}`);
