@@ -31,8 +31,6 @@ export const Programmer = () => {
     }
     try {
       setRunning(true);
-      await esploader().transport.run_stub();
-      await new Promise((resolve) => setTimeout(resolve, 1000));
       await esploader().write_flash({
         fileArray: fileArray,
         flashSize: "keep",
@@ -53,7 +51,6 @@ export const Programmer = () => {
   const erase = async () => {
     try {
       setRunning(true);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
       await esploader().erase_flash();
     } catch (e) {
       console.error(e);
@@ -63,11 +60,29 @@ export const Programmer = () => {
     }
   };
 
+  const reset = async () => {
+    await esploader().hard_reset();
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  };
+
+  const reconnect = async () => {
+    setRunning(true);
+    await esploader().transport.waitForUnlock(1500);
+    await esploader().transport.disconnect();
+    await esploader().transport.waitForUnlock(1500);
+    term.clear();
+    await esploader().connect();
+    await esploader().run_stub();
+    setRunning(false);
+  };
+
   return (
     <div id="programmer">
       <Show when={connected()}>
             <h3>Upload Firmware</h3>
             <Show when={connected()}>
+              <button disabled={running()} onClick={reconnect}>Reconnect</button>
+              <button disabled={running()} onClick={reset}>Reset device</button>
               <button disabled={running()} onClick={erase}>
                 Erase Firmware
               </button>
@@ -75,6 +90,7 @@ export const Programmer = () => {
             <For each={data.devices} fallback={<div>Loading...</div>}>
               {(device) => (
                 <div className="device">
+                  <h2>{device}</h2>
                   <For each={data.versions} fallback={<div>Loading...</div>}>
                     {(version) => (
                       <div class="version">
