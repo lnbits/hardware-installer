@@ -1,28 +1,40 @@
-#include <ArduinoJson.h>
+#include "config.h"
 
-int config_led_pin;
+// globals
 String config_ssid;
 String config_password;
-
+int config_led_pin;
+int config_boot_lock;
 
 void setup() {
     Serial.begin(115200);
-    #ifdef TFT
     setupTFT();
-    #endif
     setupConfig();
     setupWifi();
-    pinMode(config_led_pin, OUTPUT); // To blink on board LED
+    setupButtons();
+
+    // setup led
+    pinMode(config_led_pin, OUTPUT);
 }
 
 void loop() {
     loopWifi();
+    loopButtons();
+
+    // blink led or backlight on tdisplay
     blinkLed(config_led_pin);
 }
 
+int lastBlink = 0;
+
 void blinkLed(int pin) {
-    digitalWrite(pin, LOW);
-    delay(2000);
-    digitalWrite(pin, HIGH);
-    delay(2000);
+    int state = digitalRead(pin);
+    int wait = 100;
+    if (state == HIGH) {
+        wait = 5000;
+    }
+    if (millis() - lastBlink > wait) {
+        lastBlink = millis();
+        digitalWrite(pin, !state);
+    }
 }

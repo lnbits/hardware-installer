@@ -1,29 +1,23 @@
-// do not change the version manually or move the #define it will be replaced during release
-#define VERSION "v0.1.0"
-#define NAME "GenericExample"
-
-// uncomment if you dont want to use the configuration file
-//#define HARDCODED
-
-// time in seconds for configurator to send /delete-file
-// so the device boots in configuration mode
-#define BOOTUP_TIMEOUT 3
-#define CONFIG_FILE "/elements.json"
-
-// device specific configuration / defaults
-#define CONFIG_LED_PIN 2
-#define CONFIG_SSID "my_wifi_ssid"
-#define CONFIG_PASSWORD "my_wifi_password"
+#include "config.h"
 
 #ifdef HARDCODED
 void setupConfig(){
     Serial.println("Setting hardcoded values...");
+    Serial.println("LED pin: " + String(CONFIG_LED_PIN));
+    Serial.println("WIFI SSID: " + CONFIG_SSID);
+    Serial.println("WIFI password: " + CONFIG_PASSWORD);
     config_led_pin = CONFIG_LED_PIN;
-    Serial.println("LED pin: " + String(config_led_pin));
     config_ssid = CONFIG_SSID;
-    Serial.println("SSID: " + config_ssid);
     config_password = CONFIG_PASSWORD;
-    Serial.println("SSID password: " + config_password);
+    config_boot_lock = 0;
+}
+void writeConfig() {
+    Serial.println("Cannot write config in HARDCODED mode.");
+    return "";
+}
+void deleteConfig() {
+    Serial.println("Cannot delete config in HARDCODED mode.");
+    return "";
 }
 #else
 #include <FS.h>
@@ -31,25 +25,66 @@ void setupConfig(){
 
 void setupConfig(){
     SPIFFS.begin(true);
-    // first give the installer a chance to delete configuration file
-    executeConfigBoot();
     String fileContent = readConfig();
     // file does not exist, so we will enter endless config mode
     if (fileContent == "") {
         Serial.println("Config file does not exist.");
         executeConfigForever();
     }
-    JsonDocument doc;
-    DeserializationError error = deserializeJson(doc, fileContent);
-    if(error){
-        Serial.print("deserializeJson() failed: ");
-        Serial.println(error.c_str());
-    }
 
-    config_ssid = getJsonValue(doc, "config_ssid", CONFIG_SSID);
-    config_password = getJsonValue(doc, "config_password", CONFIG_PASSWORD);
-    String led_pin = getJsonValue(doc, "config_led_pin", String(CONFIG_LED_PIN));
-    config_led_pin = led_pin.toInt();
+    config_led_pin = getConfigInt(fileContent, "led_pin", CONFIG_LED_PIN);
+    config_ssid = getConfigValue(fileContent, "ssid", CONFIG_SSID);
+    config_password = getConfigValue(fileContent, "password", CONFIG_PASSWORD);
+    config_boot_lock = getConfigInt(fileContent, "boot_lock", 0);
+
+    if (config_boot_lock == 0) {
+      executeConfigBoot();
+    }
+}
+
+void writeConfig() {
+    String data = "";
+    data += "led_pin=" + String(config_led_pin) + "\n";
+    data += "ssid=" + config_ssid + "\n";
+    data += "password=" + config_password + "\n";
+    data += "boot_lock=" + String(config_boot_lock) + "\n";
+    if (config_boot_lock == 0) {
+      Serial.println("Writing config:\n" + data);
+    }
+    SPIFFS.begin(true);
+    File paramFile = SPIFFS.open(CONFIG_FILE, FILE_WRITE);
+    if (!paramFile) {
+        Serial.println("Failed to open config file for writing.");
+        return;
+    }
+    paramFile.print(data);
+    paramFile.close();
+    Serial.println("Config written.");
+}
+
+// format: key=value\n
+String getConfigValue(String &fileContent, const char* name, String defaultValue) {
+    int index = fileContent.indexOf(String(name) + "=");
+    if (index == -1) {
+        if (config_boot_lock == 0) {
+          Serial.println("Config value for " + String(name) + " not found. Using default: " + defaultValue);
+        }
+        return defaultValue;
+    }
+    int endIndex = fileContent.indexOf("\n", index);
+    if (endIndex == -1) {
+        endIndex = fileContent.length();
+    }
+    String value = fileContent.substring(index + strlen(name) + 1, endIndex);
+    if (config_boot_lock == 0) {
+      Serial.println(String(name) + "=" + value);
+    }
+    return value;
+}
+
+int getConfigInt(String &fileContent, const char* name, int defaultValue) {
+    String str = getConfigValue(fileContent, name, String(defaultValue));
+    return str.toInt();
 }
 
 String readConfig() {
@@ -65,24 +100,9 @@ String readConfig() {
     return fileContent;
 }
 
-String getJsonValue(JsonDocument &doc, const char* name, String defaultValue)
-{
-    String value = defaultValue;
-    for (JsonObject elem : doc.as<JsonArray>()) {
-        if (strcmp(elem["name"], name) == 0) {
-            value = elem["value"].as<String>();
-            Serial.println(String(name) + ": " + value);
-            return value;
-        }
-    }
-    Serial.println(String(name) + " (using default): " + value);
-    return defaultValue;
-}
-
 void executeConfigBoot() {
     Serial.println("Entering boot mode. Waiting for " + String(BOOTUP_TIMEOUT) + " seconds.");
-    clearTFT();
-    printTFT("BOOT MODE", 21, 21);
+    printBoot();
     int counter = BOOTUP_TIMEOUT + 1;
     while (counter-- > 0) {
         if (Serial.available() == 0) {
@@ -97,23 +117,26 @@ void executeConfigBoot() {
     Serial.println("Exiting boot mode.");
     Serial.print("Welcome to the LNbits " + String(NAME) + "!");
     Serial.println(" (" + String(VERSION) + ")");
-    clearTFT();
-    printTFT(String(NAME), 21, 21);
-    printTFT(String(VERSION), 21, 42);
+    printHome(false);
 }
 
 void executeConfigForever() {
     Serial.println("Entering config mode. until we receive /config-done.");
-    clearTFT();
-    printTFT("CONFIG", 21, 21);
+    printConfig();
     bool done = false;
     while (true) {
         done = executeConfig();
         if (done) {
             Serial.println("Exiting config mode.");
+            ESP.restart();
             return;
         }
     }
+}
+
+void deleteConfig() {
+    SPIFFS.remove(CONFIG_FILE);
+    ESP.restart();
 }
 
 bool executeConfig() {
@@ -125,7 +148,7 @@ bool executeConfig() {
     return true;
   }
   if (data == "/file-remove") {
-    SPIFFS.remove(CONFIG_FILE);
+    deleteConfig();
   }
   if (data.startsWith("/file-append")) {
     File file = SPIFFS.open(CONFIG_FILE, FILE_APPEND);
@@ -137,8 +160,8 @@ bool executeConfig() {
     }
     if (file) {
       int pos = data.indexOf(" ");
-      String jsondata = data.substring(pos + 1);
-      file.println(jsondata);
+      String _data = data.substring(pos + 1);
+      file.println(_data);
       file.close();
     }
   }

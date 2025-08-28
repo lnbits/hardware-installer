@@ -1,24 +1,33 @@
+#include "config.h"
+
 #include <WiFi.h>
 
 void setupWifi() {
+    Serial.println("Connecting to WiFi...");
     WiFi.begin(config_ssid.c_str(), config_password.c_str());
-    Serial.print("Connecting to WiFi.");
     while (WiFi.status() != WL_CONNECTED) {
-        Serial.print(".");
-        delay(500);
-        digitalWrite(2, HIGH);
-        Serial.print(".");
-        delay(500);
-        digitalWrite(2, LOW);
+        delay(300);
     }
-    Serial.println();
-    Serial.println("WiFi connection etablished!");
-    printTFT("WiFi connected!", 21, 69);
+    Serial.println("WiFi connected! ip: " + WiFi.localIP().toString());
+    printHome(true);
 }
 
 void loopWifi() {
     while (WiFi.status() != WL_CONNECTED) {
-        Serial.println("WiFi disconnected!");
-        delay(500);
+        Serial.println("WiFi disconnected! Reconnecting...");
+        printHome(false);
+        WiFi.reconnect();
     }
+}
+
+// converts the dBm to a range between 0 and 100%
+int8_t getWifiQuality() {
+  int32_t dbm = WiFi.RSSI();
+  if (dbm <= -100) {
+    return 0;
+  } else if (dbm >= -50) {
+    return 100;
+  } else {
+    return 2 * (dbm + 100);
+  }
 }

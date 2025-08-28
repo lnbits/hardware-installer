@@ -9,7 +9,8 @@ export const Configurator = () => {
     if (esploader().transport.device.writable) {
       // Filter out heading elements before uploading
       const uploadConfig = config().filter((e) => e.type !== "heading");
-      const preparedConfig = JSON.stringify(uploadConfig, null, 2);
+      // format : key=value\n
+      const preparedConfig = uploadConfig.map(e => `${e.name}=${e.value}`).join("\n");
       const writer = esploader().transport.device.writable.getWriter();
       writer.write(enc.encode(`/file-remove\n`));
       const lines = preparedConfig.split("\n");
