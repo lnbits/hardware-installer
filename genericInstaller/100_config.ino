@@ -4,11 +4,11 @@
 void setupConfig(){
     Serial.println("Setting hardcoded values...");
     Serial.println("LED pin: " + String(CONFIG_LED_PIN));
-    Serial.println("WIFI SSID: " + CONFIG_SSID);
-    Serial.println("WIFI password: " + CONFIG_PASSWORD);
+    Serial.println("WIFI SSID: " + CONFIG_WIFI_SSID);
+    Serial.println("WIFI password: " + CONFIG_WIFI_PASSWORD);
     config_led_pin = CONFIG_LED_PIN;
-    config_ssid = CONFIG_SSID;
-    config_password = CONFIG_PASSWORD;
+    config_wifi_ssid = CONFIG_WIFI_SSID;
+    config_wifi_password = CONFIG_WIFI_PASSWORD;
     config_boot_lock = 0;
 }
 void writeConfig() {
@@ -33,8 +33,8 @@ void setupConfig(){
     }
 
     config_led_pin = getConfigInt(fileContent, "led_pin", CONFIG_LED_PIN);
-    config_ssid = getConfigValue(fileContent, "ssid", CONFIG_SSID);
-    config_password = getConfigValue(fileContent, "password", CONFIG_PASSWORD);
+    config_wifi_ssid = getConfigValue(fileContent, "wifi_ssid", CONFIG_WIFI_SSID);
+    config_wifi_password = getConfigValue(fileContent, "wifi_password", CONFIG_WIFI_PASSWORD);
     config_boot_lock = getConfigInt(fileContent, "boot_lock", 0);
 
     if (config_boot_lock == 0) {
@@ -45,8 +45,8 @@ void setupConfig(){
 void writeConfig() {
     String data = "";
     data += "led_pin=" + String(config_led_pin) + "\n";
-    data += "ssid=" + config_ssid + "\n";
-    data += "password=" + config_password + "\n";
+    data += "wifi_ssid=" + config_wifi_ssid + "\n";
+    data += "wifi_password=" + config_wifi_password + "\n";
     data += "boot_lock=" + String(config_boot_lock) + "\n";
     if (config_boot_lock == 0) {
       Serial.println("Writing config:\n" + data);

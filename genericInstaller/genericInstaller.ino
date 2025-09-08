@@ -1,8 +1,8 @@
 #include "config.h"
 
 // globals
-String config_ssid;
-String config_password;
+String config_wifi_ssid;
+String config_wifi_password;
 int config_led_pin;
 int config_boot_lock;
 

@@ -31,13 +31,13 @@ export const elements = [
     type: "text",
   },
   {
-    name: "ssid",
+    name: "wifi_ssid",
     value: "",
     label: "WiFi SSID",
     type: "text",
   },
   {
-    name: "password",
+    name: "wifi_password",
     value: "",
     label: "WiFi password",
     type: "text",

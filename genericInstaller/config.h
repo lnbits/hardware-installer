@@ -13,8 +13,8 @@
 //#define HARDCODED
 
 // device specific configuration / defaults
-#define CONFIG_SSID "my_wifi_ssid"
-#define CONFIG_PASSWORD "my_wifi_password"
+#define CONFIG_WIFI_SSID "my_wifi_ssid"
+#define CONFIG_WIFI_PASSWORD "my_wifi_password"
 
 
 #ifdef ESP32

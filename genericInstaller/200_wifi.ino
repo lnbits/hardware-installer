@@ -4,7 +4,7 @@
 
 void setupWifi() {
     Serial.println("Connecting to WiFi...");
-    WiFi.begin(config_ssid.c_str(), config_password.c_str());
+    WiFi.begin(config_wifi_ssid.c_str(), config_wifi_password.c_str());
     while (WiFi.status() != WL_CONNECTED) {
         delay(300);
     }
