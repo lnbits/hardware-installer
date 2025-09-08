@@ -6,9 +6,15 @@ void printHome() {}
 void printConfig() {}
 void printBoot() {}
 void printDeleteWarning() {}
+void printInstaller() {}
+void printMenu() {}
+void printQrCode(String data) {}
+void printSettings() {}
+void printInfo() {}
 #else
 #include "config.h"
 #include <TFT_eSPI.h>
+#include <QRCodeGenerator.h>
 
 #define LINE_HEIGHT 20
 #define PADDING_X 12
@@ -38,6 +44,7 @@ void setupTFT() {
   tft.setTextSize(5);
   tft.setCursor(PADDING_X, 58);
   tft.println("LNbits");
+  delay(200);
 }
 void printTFT(String message, int x, int y) {
   tft.setTextSize(2);
@@ -113,18 +120,36 @@ void printHome() {
     tft.setCursor(VERSION_PADDING_X, FOOTER_PADDING_Y);
     tft.println(String(VERSION));
     if (wifi_connected) {
-        printTFT("WiFi connected", PADDING_X, PADDING_Y);
+        // printTFT("WiFi connected", PADDING_X, PADDING_Y);
         int8_t quality = getWifiQuality();
         drawWifiBars(196, HEADER_PADDING_Y, quality);
     } else {
-        printTFT("No WiFi", PADDING_X, PADDING_Y);
+        // printTFT("No WiFi", PADDING_X, PADDING_Y);
         drawWifiBars(196, HEADER_PADDING_Y, 0);
     }
     if (config_boot_lock == 1) {
-        printTFT("BOOT LOCKED", PADDING_X, PADDING_Y + LINE_HEIGHT);
+        // printTFT("BOOT LOCKED", PADDING_X, PADDING_Y + LINE_HEIGHT);
         drawKey(172, HEADER_PADDING_Y);
     } else {
-        printTFT("BOOT UNLOCKED", PADDING_X, PADDING_Y + LINE_HEIGHT);
+        // printTFT("BOOT UNLOCKED", PADDING_X, PADDING_Y + LINE_HEIGHT);
+    }
+
+    switch (currentScreen) {
+      case SCREEN_HOME:
+        printMenu();
+        break;
+      case SCREEN_QR:
+        printQrCode("dni@lnbits.com");
+        break;
+      case SCREEN_SETTINGS:
+        printSettings();
+        break;
+      case SCREEN_INFO:
+        printInfo();
+        break;
+      default:
+        Serial.println("Switches to screen" + String(currentScreen));
+        break;
     }
 }
 
@@ -136,4 +161,85 @@ void printDeleteWarning() {
     printTFT("TO ERASE", PADDING_X, 63);
     printTFT("CONFIG", PADDING_X, 84);
 }
+
+void printMenu() {
+  // Draw menu items
+  int y = PADDING_Y;
+  tft.setTextSize(2);
+  tft.setCursor(PADDING_X, y);
+  if (currentMenuItem == SCREEN_QR) tft.setTextColor(TFT_YELLOW); else tft.setTextColor(TFT_WHITE);
+  tft.println("Show QR Code");
+
+  y += LINE_HEIGHT;
+  tft.setCursor(PADDING_X, y);
+  if (currentMenuItem == SCREEN_SETTINGS) tft.setTextColor(TFT_YELLOW); else tft.setTextColor(TFT_WHITE);
+  tft.println("Settings");
+
+  y += LINE_HEIGHT;
+  tft.setCursor(PADDING_X, y);
+  if (currentMenuItem == SCREEN_INFO) tft.setTextColor(TFT_YELLOW); else tft.setTextColor(TFT_WHITE);
+  tft.println("Device Info");
+}
+
+void printQrCode(String data)
+{
+  const int brightness = 200; // 0-255
+  uint16_t qrScreenBgColour = tft.color565(brightness, brightness, brightness);
+  tft.fillScreen(qrScreenBgColour);
+  const char *qrDataChar = data.c_str();
+
+  QRCode qrcoded;
+  uint8_t qrcodeData[qrcode_getBufferSize(20)];
+  qrcode_initText(&qrcoded, qrcodeData, 6, 0, qrDataChar);
+
+  unsigned int pixSize = 3;
+  unsigned int offsetTop = 5;
+  unsigned int offsetLeft = 65;
+
+  for (uint8_t y = 0; y < qrcoded.size; y++)
+  {
+    for (uint8_t x = 0; x < qrcoded.size; x++)
+    {
+      if (qrcode_getModule(&qrcoded, x, y))
+      {
+        tft.fillRect(offsetLeft + pixSize * x, offsetTop + pixSize * y, pixSize, pixSize, TFT_BLACK);
+      }
+      else
+      {
+        tft.fillRect(offsetLeft + pixSize * x, offsetTop + pixSize * y, pixSize, pixSize, qrScreenBgColour);
+      }
+    }
+  }
+}
+
+void printInfo() {
+    tft.setTextSize(3);
+    tft.setTextColor(TFT_WHITE);
+    tft.setCursor(PADDING_X, 14);
+    tft.println("Info");
+    tft.setTextSize(2);
+    tft.setCursor(PADDING_X, 52);
+    tft.println("WiFi: " + String(config_wifi_ssid));
+    tft.setCursor(PADDING_X, 72);
+    tft.println("IP: " + String(WiFi.localIP().toString()));
+    tft.setCursor(PADDING_X, 92);
+    tft.println("LED Pin: " + String(config_led_pin));
+}
+
+void printSettings() {
+    tft.setTextSize(3);
+    tft.setTextColor(TFT_WHITE);
+    tft.setCursor(PADDING_X, 14);
+    tft.println("Settings");
+    tft.setTextSize(2);
+    int y = 52;
+    tft.setCursor(PADDING_X, y);
+    if (currentSetting == SETTING_ENABLE_BLINK) tft.setTextColor(TFT_YELLOW); else tft.setTextColor(TFT_WHITE);
+    tft.println("Enable Blink: " + String(enable_blink ? "YES" : "NO"));
+    y += LINE_HEIGHT;
+    tft.setCursor(PADDING_X, y);
+    if (currentSetting == SETTING_BOOT_LOCK) tft.setTextColor(TFT_YELLOW); else tft.setTextColor(TFT_WHITE);
+    tft.println("Bootlock: " + String(config_boot_lock == 1 ? "LOCKED" : "UNLOCKED"));
+}
+
 #endif

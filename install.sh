@@ -7,4 +7,4 @@ arduino-cli core update-index
 # also change in release workflow
 arduino-cli core install esp32:esp32
 arduino-cli upgrade
-arduino-cli lib install TFT_eSPI
+arduino-cli lib install TFT_eSPI QrCodeGenerator

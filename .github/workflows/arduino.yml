@@ -29,6 +29,7 @@ jobs:
             - --warnings="none"
           libraries: |
             - name: TFT_eSPI
+            - name: QRCodeGenerator
 
       - uses: actions/upload-artifact@v4
         with:

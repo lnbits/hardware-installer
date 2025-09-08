@@ -9,6 +9,7 @@ void setupWifi() {
     printHome();
     Serial.println("Connecting to WiFi...");
     WiFi.begin(config_wifi_ssid.c_str(), config_wifi_password.c_str());
+    wifiLastReconnectAttempt = millis();
 }
 
 void loopWifi() {

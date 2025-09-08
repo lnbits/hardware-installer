@@ -13,7 +13,6 @@ void setupButtons() {
 }
 
 void loopButtons() {
-
   if (bothPressed > 0 && digitalRead(BTN_1) == HIGH && digitalRead(BTN_2) == HIGH) {
     Serial.println("Both buttons released after " + String(millis() - bothPressed) + " ms");
     bothPressed = 0;
@@ -21,11 +20,65 @@ void loopButtons() {
     showWarning = false;
     printHome();
   } else if (firstPressed > 0 && digitalRead(BTN_1) == HIGH) {
-    Serial.println("Button 1 released after " + String(millis() - firstPressed) + " ms");
+    // button 1 released after
+    const int releaseTime = millis() - firstPressed;
+    Serial.println("Button 1 released after " + String(releaseTime) + " ms");
     firstPressed = 0;
+    switch (currentScreen) {
+      case SCREEN_HOME:
+        currentMenuItem++;
+        // last screen in enum is SCREEN_INFO, first is SCREEN_QR
+        if (currentMenuItem > SCREEN_INFO) currentMenuItem = SCREEN_QR;
+        break;
+      case SCREEN_QR:
+        Serial.println("Show QR Code press");
+        break;
+      case SCREEN_SETTINGS:
+        if (releaseTime < 500) {
+          currentSetting++;
+          if (currentSetting > SETTING_BOOT_LOCK) currentSetting = SETTING_ENABLE_BLINK;
+        } else {
+          // long press, toggle setting
+          switch (currentSetting) {
+            case SETTING_ENABLE_BLINK:
+              enable_blink = !enable_blink;
+              Serial.println("Enable blink: " + String(enable_blink));
+              break;
+            case SETTING_BOOT_LOCK:
+              if (config_boot_lock == 1) {
+                config_boot_lock = 0;
+              } else {
+                config_boot_lock = 1;
+              }
+              Serial.println("Boot lock: " + String(config_boot_lock));
+              writeConfig();
+              break;
+          }
+        }
+        break;
+        Serial.println("Show QR Code press");
+        break;
+      default:
+        Serial.println("Other screen press 1");
+        break;
+    }
+    printHome();
   } else if (secondPressed > 0 && digitalRead(BTN_2) == HIGH) {
     Serial.println("Button 2 released after " + String(millis() - secondPressed) + " ms");
     secondPressed = 0;
+    switch (currentScreen) {
+      // toggle through menu items
+      case SCREEN_HOME:
+        Serial.println("Go to selected menu item: " + String(currentMenuItem));
+        currentScreen = currentMenuItem;
+        break;
+      // cancel and go back to home screen
+      default:
+        Serial.println("Cancel from screen " + String(currentScreen));
+        currentScreen = SCREEN_HOME;
+        break;
+    }
+    printHome();
   }
 
   if (digitalRead(BTN_1) == LOW && digitalRead(BTN_2) == LOW) {

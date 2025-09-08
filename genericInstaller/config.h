@@ -30,4 +30,16 @@
   #define CONFIG_LED_PIN 4
 #endif
 
+enum Screen {
+  SCREEN_HOME,
+  SCREEN_QR,
+  SCREEN_SETTINGS,
+  SCREEN_INFO,
+};
+
+enum SettingsMenu {
+    SETTING_ENABLE_BLINK,
+    SETTING_BOOT_LOCK,
+};
+
 #endif

@@ -76,6 +76,7 @@ String getConfigValue(String &fileContent, const char* name, String defaultValue
         endIndex = fileContent.length();
     }
     String value = fileContent.substring(index + strlen(name) + 1, endIndex);
+    value.trim();
     if (config_boot_lock == 0) {
       Serial.println(String(name) + "=" + value);
     }
