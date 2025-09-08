@@ -117,7 +117,7 @@ void executeConfigBoot() {
     Serial.println("Exiting boot mode.");
     Serial.print("Welcome to the LNbits " + String(NAME) + "!");
     Serial.println(" (" + String(VERSION) + ")");
-    printHome(false);
+    printHome();
 }
 
 void executeConfigForever() {

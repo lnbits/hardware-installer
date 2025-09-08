@@ -6,6 +6,8 @@ String config_wifi_password;
 int config_led_pin;
 int config_boot_lock;
 
+int wifi_connected = false;
+
 void setup() {
     Serial.begin(115200);
     setupTFT();

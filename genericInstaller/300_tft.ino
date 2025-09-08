@@ -2,7 +2,7 @@
 void setupTFT() {}
 void printTFT(String message, int x, int y) {}
 void clearTFT() {}
-void printHome(bool wifi) {}
+void printHome() {}
 void printConfig() {}
 void printBoot() {}
 void printDeleteWarning() {}
@@ -103,7 +103,7 @@ void drawWifiBars(int x, int y, int quality) {
     }
 }
 
-void printHome(bool wifi) {
+void printHome() {
     clearTFT();
     tft.setTextSize(1);
     tft.setTextColor(TFT_PURPLE);
@@ -112,7 +112,7 @@ void printHome(bool wifi) {
     tft.setTextColor(TFT_WHITE);
     tft.setCursor(VERSION_PADDING_X, FOOTER_PADDING_Y);
     tft.println(String(VERSION));
-    if (wifi) {
+    if (wifi_connected) {
         printTFT("WiFi connected", PADDING_X, PADDING_Y);
         int8_t quality = getWifiQuality();
         drawWifiBars(196, HEADER_PADDING_Y, quality);

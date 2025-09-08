@@ -2,21 +2,30 @@
 
 #include <WiFi.h>
 
+int wifiReconnectDelay = 10000;
+int wifiLastReconnectAttempt = 0;
+
 void setupWifi() {
+    printHome();
     Serial.println("Connecting to WiFi...");
     WiFi.begin(config_wifi_ssid.c_str(), config_wifi_password.c_str());
-    while (WiFi.status() != WL_CONNECTED) {
-        delay(300);
-    }
-    Serial.println("WiFi connected! ip: " + WiFi.localIP().toString());
-    printHome(true);
 }
 
 void loopWifi() {
-    while (WiFi.status() != WL_CONNECTED) {
+    if (millis() - wifiLastReconnectAttempt >= wifiReconnectDelay && WiFi.status() != WL_CONNECTED) {
         Serial.println("WiFi disconnected! Reconnecting...");
-        printHome(false);
+        wifiLastReconnectAttempt = millis();
+        wifi_connected = false;
+        printHome();
         WiFi.reconnect();
+    } else if (WiFi.status() == WL_CONNECTED) {
+        static bool wasConnected = false;
+        if (!wasConnected) {
+            Serial.println("WiFi connected! ip: " + WiFi.localIP().toString());
+            wifi_connected = true;
+            printHome();
+            wasConnected = true;
+        }
     }
 }
 

@@ -19,7 +19,7 @@ void loopButtons() {
     bothPressed = 0;
     executedUnlock = false;
     showWarning = false;
-    printHome(true);
+    printHome();
   } else if (firstPressed > 0 && digitalRead(BTN_1) == HIGH) {
     Serial.println("Button 1 released after " + String(millis() - firstPressed) + " ms");
     firstPressed = 0;
@@ -44,7 +44,7 @@ void loopButtons() {
       }
       executedUnlock = true;
       writeConfig();
-      printHome(true);
+      printHome();
     }
     if (!showWarning && millis() - bothPressed >= 7000) {
       Serial.println("Show delete config in 3 seconds warning...");
