@@ -8,6 +8,8 @@ int wifiLastReconnectAttempt = 0;
 void setupWifi() {
     printHome();
     Serial.println("Connecting to WiFi...");
+    // @axelhamburch https://github.com/lnbits/bitcoinswitch/pull/46
+    WiFi.setScanMethod(WIFI_ALL_CHANNEL_SCAN); // Force scanning for all APs, not just the first one
     WiFi.begin(config_wifi_ssid.c_str(), config_wifi_password.c_str());
     wifiLastReconnectAttempt = millis();
 }
