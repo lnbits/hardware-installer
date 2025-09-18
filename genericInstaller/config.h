@@ -1,21 +1,12 @@
-#ifndef CONFIG_H
-#define CONFIG_H
+#pragma once
 
 #define NAME "Generic LNbits Device"
 #define VERSION "v0.1.0"
 #define INSTALLER_URL "https://hwi.lnbits.com/"
 
 // time in seconds the installer can read/write config
-#define BOOTUP_TIMEOUT 1
+#define BOOTUP_TIMEOUT 2
 #define CONFIG_FILE "/config.txt"
-
-// uncomment if you dont want to use the configuration file
-//#define HARDCODED
-
-// device specific configuration / defaults
-#define CONFIG_WIFI_SSID "my_wifi_ssid"
-#define CONFIG_WIFI_PASSWORD "my_wifi_password"
-
 
 #ifdef ESP32
   #define BTN_1 0
@@ -41,5 +32,3 @@ enum SettingsMenu {
     SETTING_ENABLE_BLINK,
     SETTING_BOOT_LOCK,
 };
-
-#endif

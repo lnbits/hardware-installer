@@ -1,4 +1,5 @@
 #include "config.h"
+#include "hardcoded_config.h"
 
 #ifdef HARDCODED
 void setupConfig(){
@@ -137,7 +138,6 @@ void executeConfigForever() {
 
 void deleteConfig() {
     SPIFFS.remove(CONFIG_FILE);
-    ESP.restart();
 }
 
 bool executeConfig() {

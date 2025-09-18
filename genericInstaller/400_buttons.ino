@@ -107,6 +107,7 @@ void loopButtons() {
     if (millis() - bothPressed >= 10000) {
       Serial.println("Delete config and reset device.");
       deleteConfig();
+      ESP.restart();
     }
   } else if (digitalRead(BTN_1) == LOW) {
     if (firstPressed == 0) {
