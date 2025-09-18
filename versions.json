@@ -2,7 +2,8 @@
   "name": "genericInstaller",
   "devices": [
     "esp32",
-    "tdisplay"
+    "tdisplay",
+    "tdisplay_s3"
   ],
   "versions": [
     "v0.1.0",
