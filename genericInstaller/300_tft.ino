@@ -98,6 +98,7 @@ void drawKey(int x, int y) {
 void drawWifiBars(int x, int y, int quality) {
     tft.setTextSize(1);
     tft.setCursor(x, y);
+    tft.setTextColor(TFT_WHITE);
     tft.println(String(quality) + "%");
     for (int8_t i = 0; i < 4; i++) {
       for (int8_t j = 0; j < 2 * (i + 1); j++) {
@@ -110,6 +111,31 @@ void drawWifiBars(int x, int y, int quality) {
     }
 }
 
+void drawBattery(int x, int y, int percentage) {
+    if (percentage > 100) percentage = 100; // clamp to 100
+    tft.setTextSize(1);
+    tft.setCursor(x, y);
+    tft.setTextColor(TFT_WHITE);
+    tft.println(String(percentage) + "%");
+    x += 22;
+    tft.drawRect(x, y, 23, 7, TFT_WHITE);
+    tft.fillRect(x + 23, y + 1, 3, 4, TFT_WHITE);
+    int fillWidth = map(percentage, 0, 100, 0, 21);
+    if (percentage > 20) {
+        tft.fillRect(x + 1, y + 1, fillWidth, 5, TFT_GREEN);
+    } else {
+        tft.fillRect(x + 1, y + 1, fillWidth, 5, TFT_RED);
+    }
+}
+
+void drawUsb(int x, int y) {
+    tft.setTextSize(1);
+    tft.setCursor(x, y);
+    tft.setTextColor(TFT_BLUE);
+    tft.println("USB");
+    tft.setTextColor(TFT_WHITE);
+}
+
 void printHome() {
     clearTFT();
     tft.setTextSize(1);
@@ -119,19 +145,24 @@ void printHome() {
     tft.setTextColor(TFT_WHITE);
     tft.setCursor(VERSION_PADDING_X, FOOTER_PADDING_Y);
     tft.println(String(VERSION));
-    if (wifi_connected) {
-        // printTFT("WiFi connected", PADDING_X, PADDING_Y);
-        int8_t quality = getWifiQuality();
-        drawWifiBars(196, HEADER_PADDING_Y, quality);
+    int x = TFT_HEIGHT;
+
+    if (battery <= 100 && battery > 0) {
+        x -= 51;
+        drawBattery(x, HEADER_PADDING_Y, battery);
     } else {
-        // printTFT("No WiFi", PADDING_X, PADDING_Y);
-        drawWifiBars(196, HEADER_PADDING_Y, 0);
+        x -= 24;
+        drawUsb(x, HEADER_PADDING_Y);
     }
+    if (wifi_connected) {
+        x -= 48;
+        int8_t quality = getWifiQuality();
+        drawWifiBars(x, HEADER_PADDING_Y, quality);
+    }
+
     if (config_boot_lock == 1) {
-        // printTFT("BOOT LOCKED", PADDING_X, PADDING_Y + LINE_HEIGHT);
-        drawKey(172, HEADER_PADDING_Y);
-    } else {
-        // printTFT("BOOT UNLOCKED", PADDING_X, PADDING_Y + LINE_HEIGHT);
+        x -= 24;
+        drawKey(x, HEADER_PADDING_Y);
     }
 
     switch (currentScreen) {

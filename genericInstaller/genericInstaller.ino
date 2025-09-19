@@ -7,6 +7,7 @@ int config_led_pin;
 int config_boot_lock;
 
 // app state
+int battery = 0;
 int wifi_connected = false;
 int enable_blink = true;
 
@@ -22,6 +23,7 @@ void setup() {
     setupConfig();
     setupWifi();
     setupButtons();
+    setupBattery();
 
     // setup led
     pinMode(config_led_pin, OUTPUT);
@@ -30,6 +32,7 @@ void setup() {
 void loop() {
     loopWifi();
     loopButtons();
+    loopBattery();
 
     // blink led or backlight on tdisplay
     if (enable_blink) blinkLed(config_led_pin);

@@ -8,6 +8,8 @@
 #define BOOTUP_TIMEOUT 2
 #define CONFIG_FILE "/config.txt"
 
+#define BATTERY_PIN 34
+
 #ifdef ESP32
   #define BTN_1 0
   #define BTN_2 4
