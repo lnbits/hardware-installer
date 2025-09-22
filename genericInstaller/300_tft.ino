@@ -76,7 +76,6 @@ void printBoot() {
     tft.println("BOOT");
     printInstaller();
 }
-
 void drawKey(int x, int y) {
     tft.fillCircle(x + 3, y + 3, 3, TFT_YELLOW);
     tft.fillCircle(x + 3, y + 3, 1, TFT_BLACK);
@@ -87,7 +86,6 @@ void drawKey(int x, int y) {
     tft.fillRect(x + 14, y + 4, 2, 2, TFT_YELLOW);
 
 }
-
 void drawWifiBars(int x, int y, int quality) {
     tft.setTextSize(1);
     tft.setCursor(x, y);
@@ -103,7 +101,6 @@ void drawWifiBars(int x, int y, int quality) {
       }
     }
 }
-
 void drawBattery(int x, int y, int percentage) {
     if (percentage > 100) percentage = 100; // clamp to 100
     tft.setTextSize(1);
@@ -120,7 +117,6 @@ void drawBattery(int x, int y, int percentage) {
         tft.fillRect(x + 1, y + 1, fillWidth, 5, TFT_RED);
     }
 }
-
 void drawUsb(int x, int y) {
     tft.setTextSize(1);
     tft.setCursor(x, y);
@@ -128,9 +124,9 @@ void drawUsb(int x, int y) {
     tft.println("USB");
     tft.setTextColor(TFT_WHITE);
 }
-
 void printHome() {
     clearTFT();
+    // draw footer
     tft.setTextSize(1);
     tft.setTextColor(TFT_PURPLE);
     tft.setCursor(PADDING_X, FOOTER_PADDING_Y);
@@ -138,8 +134,8 @@ void printHome() {
     tft.setTextColor(TFT_WHITE);
     tft.setCursor(VERSION_PADDING_X, FOOTER_PADDING_Y);
     tft.println(String(VERSION));
+    // draw top menu
     int x = TFT_HEIGHT;
-
     if (battery <= 100 && battery > 0) {
         x -= 51;
         drawBattery(x, HEADER_PADDING_Y, battery);
@@ -152,12 +148,11 @@ void printHome() {
         int8_t quality = getWifiQuality();
         drawWifiBars(x, HEADER_PADDING_Y, quality);
     }
-
     if (config_boot_lock == 1) {
         x -= 24;
         drawKey(x, HEADER_PADDING_Y);
     }
-
+    // draw current screen
     switch (currentScreen) {
       case SCREEN_HOME:
         printMenu();
@@ -176,7 +171,6 @@ void printHome() {
         break;
     }
 }
-
 void printDeleteWarning() {
     tft.fillScreen(TFT_RED);
     tft.setTextColor(TFT_WHITE);
@@ -185,7 +179,6 @@ void printDeleteWarning() {
     printTFT("TO ERASE", PADDING_X, 63);
     printTFT("CONFIG", PADDING_X, 84);
 }
-
 void printMenu() {
   // Draw menu items
   int y = PADDING_Y;
@@ -204,7 +197,6 @@ void printMenu() {
   if (currentMenuItem == SCREEN_INFO) tft.setTextColor(TFT_YELLOW); else tft.setTextColor(TFT_WHITE);
   tft.println("Device Info");
 }
-
 void printQrCode(String data)
 {
   const int brightness = 200; // 0-255
@@ -235,7 +227,6 @@ void printQrCode(String data)
     }
   }
 }
-
 void printInfo() {
     tft.setTextSize(3);
     tft.setTextColor(TFT_WHITE);
@@ -249,7 +240,6 @@ void printInfo() {
     tft.setCursor(PADDING_X, 92);
     tft.println("LED Pin: " + String(config_led_pin));
 }
-
 void printSettings() {
     tft.setTextSize(3);
     tft.setTextColor(TFT_WHITE);
@@ -265,5 +255,4 @@ void printSettings() {
     if (currentSetting == SETTING_BOOT_LOCK) tft.setTextColor(TFT_YELLOW); else tft.setTextColor(TFT_WHITE);
     tft.println("Bootlock: " + String(config_boot_lock == 1 ? "LOCKED" : "UNLOCKED"));
 }
-
 #endif
