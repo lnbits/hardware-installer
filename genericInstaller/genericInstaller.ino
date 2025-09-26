@@ -19,35 +19,22 @@ int currentSetting = SETTING_ENABLE_BLINK;
 
 void setup() {
     Serial.begin(115200);
+
+    // LilyGo Bug enable battery fix
+    #ifdef TDISPLAY_S3
+      pinMode(PIN_ENABLE5V, OUTPUT);
+      digitalWrite(PIN_ENABLE5V, HIGH);
+    #endif
+
     setupTFT();
     setupConfig();
     setupWifi();
     setupButtons();
     setupBattery();
-
-    // setup led
-    pinMode(config_led_pin, OUTPUT);
 }
 
 void loop() {
     loopWifi();
     loopButtons();
     loopBattery();
-
-    // blink led or backlight on tdisplay
-    if (enable_blink) blinkLed(config_led_pin);
-}
-
-int lastBlink = 0;
-
-void blinkLed(int pin) {
-    int state = digitalRead(pin);
-    int wait = 100;
-    if (state == HIGH) {
-        wait = 5000;
-    }
-    if (millis() - lastBlink > wait) {
-        lastBlink = millis();
-        digitalWrite(pin, !state);
-    }
 }

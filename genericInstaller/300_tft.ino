@@ -20,7 +20,6 @@ void printInfo() {}
 #define PADDING_X 12
 #define PADDING_Y 21
 #define HEADER_PADDING_Y 4
-#define FOOTER_PADDING_Y 123
 #define VERSION_PADDING_X 200
 
 TFT_eSPI tft = TFT_eSPI(TFT_WIDTH, TFT_HEIGHT);
@@ -125,17 +124,28 @@ void drawUsb(int x, int y) {
     tft.setTextColor(TFT_WHITE);
 }
 void printHome() {
+
+    if (currentScreen == SCREEN_QR) {
+        printQrCode("dni@lnbits.com");
+        return;
+    }
+
     clearTFT();
+
+    int footerY = TFT_WIDTH - 10;
+    int versionX = TFT_HEIGHT - 42;
+
     // draw footer
     tft.setTextSize(1);
     tft.setTextColor(TFT_PURPLE);
-    tft.setCursor(PADDING_X, FOOTER_PADDING_Y);
+    tft.setCursor(PADDING_X, footerY);
     tft.println(String(NAME));
     tft.setTextColor(TFT_WHITE);
-    tft.setCursor(VERSION_PADDING_X, FOOTER_PADDING_Y);
+    tft.setCursor(versionX, footerY);
     tft.println(String(VERSION));
-    // draw top menu
+
     int x = TFT_HEIGHT;
+    // draw top menu
     if (battery <= 100 && battery > 0) {
         x -= 51;
         drawBattery(x, HEADER_PADDING_Y, battery);
@@ -156,9 +166,6 @@ void printHome() {
     switch (currentScreen) {
       case SCREEN_HOME:
         printMenu();
-        break;
-      case SCREEN_QR:
-        printQrCode("dni@lnbits.com");
         break;
       case SCREEN_SETTINGS:
         printSettings();
@@ -211,6 +218,11 @@ void printQrCode(String data)
   unsigned int pixSize = 3;
   unsigned int offsetTop = 5;
   unsigned int offsetLeft = 65;
+
+#ifdef TDISPLAY_S3
+  pixSize = 4;
+  offsetLeft = 80;
+#endif
 
   for (uint8_t y = 0; y < qrcoded.size; y++)
   {
