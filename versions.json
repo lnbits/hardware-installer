@@ -5,8 +5,5 @@
     "tdisplay",
     "tdisplay_s3"
   ],
-  "versions": [
-    "v0.1.0",
-    "v0.0.0"
-  ]
+  "versions": []
 }
