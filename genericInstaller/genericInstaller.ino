@@ -16,6 +16,7 @@ int currentMenuItem = SCREEN_QR;
 int currentScreen = SCREEN_HOME;
 int currentSetting = SETTING_ENABLE_BLINK;
 
+uint16_t touchX, touchY;
 
 void setup() {
     Serial.begin(115200);
@@ -30,11 +31,13 @@ void setup() {
     setupConfig();
     setupWifi();
     setupButtons();
+    setupTouch();
     setupBattery();
 }
 
 void loop() {
     loopWifi();
     loopButtons();
+    loopTouch();
     loopBattery();
 }

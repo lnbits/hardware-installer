@@ -27,7 +27,6 @@ void setupTFT() {
   tft.init();
   Serial.println("TFT: " + String(TFT_WIDTH) + "x" + String(TFT_HEIGHT));
   tft.setRotation(1);
-  tft.invertDisplay(true);
   tft.fillScreen(TFT_PURPLE);
   tft.setTextColor(TFT_WHITE);
   tft.setTextSize(2);
