@@ -23,29 +23,55 @@ export const Programmer = () => {
       const fileBlob = await response.blob();
       const fileData = await new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
+        reader.onloadend = () => {
+            const decoder = new TextDecoder("utf-8");
+            const result = decoder.decode(reader.result);
+            resolve(result);
+        }
         reader.onerror = reject;
-        reader.readAsBinaryString(fileBlob);
+        reader.readAsArrayBuffer(fileBlob);
       });
       fileArray.push({ data: fileData, address: item.address });
     }
-    try {
-      setRunning(true);
-      await esploader().write_flash({
+    // try {
+      // setRunning(true);
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
+      await esploader().writeFlash({
         fileArray: fileArray,
         flashSize: "keep",
         eraseAll: false,
         compress: true,
       });
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      await esploader().transport.setDTR(false);
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      await esploader().transport.setDTR(true)
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setRunning(false);
-    }
+      await esploader().after();
+      let buffer = new Uint8Array();
+      while (true) {
+        if (!connected() || running()) {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          continue;
+        }
+        const readLoop = esploader().transport.rawRead(1000);
+        const { value, done } = await readLoop.next();
+
+        if (done || !value) {
+          console.log(buffer);
+          term.write(buffer);
+          checkFileRead(buffer);
+          buffer = new Uint8Array();
+          // break;
+        }
+
+        buffer += value;
+      }
+      // await new Promise((resolve) => setTimeout(resolve, 200));
+        //
+      // await esploader().transport.setDTR(false);
+      // await new Promise((resolve) => setTimeout(resolve, 200));
+      // await esploader().transport.setDTR(true)
+    // } catch (e) {
+    //   console.error(e);
+    // } finally {
+    //   setRunning(false);
+    // }
   };
 
   const erase = async () => {
@@ -61,7 +87,7 @@ export const Programmer = () => {
   };
 
   const reset = async () => {
-    await esploader().hard_reset();
+    await esploader().hardReset();
     await new Promise((resolve) => setTimeout(resolve, 1000));
   };
 

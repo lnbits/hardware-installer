@@ -10,11 +10,12 @@ import {
 export const Connector = () => {
   const connect = async () => {
     try {
+      const baudrate = 115200;
       const device = await navigator.serial.requestPort({});
       const transport = new Transport(device);
       const esploader = new ESPLoader({
         transport,
-        baudrate: 115200,
+        baudrate: baudrate,
         terminal: {
           clean() {
             term.clear();
@@ -27,7 +28,8 @@ export const Connector = () => {
           },
         },
       });
-      await esploader.main_fn();
+      await esploader.main();
+      await esploader.after();
       setEsploader(esploader);
       setConnected(true);
     } catch (e) {

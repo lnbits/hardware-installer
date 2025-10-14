@@ -7,6 +7,9 @@ if [ "$2" = "tdisplay_s3" ]; then
     board="esp32:esp32:lilygo_t_display_s3"
     echo -e "\033[0;33mHOLD BOOT BUTTON AND RESET DEVICE TO UPLOAD!\033[0m"
 fi
+if [ "$2" = "guition_s3" ]; then
+    board="esp32:esp32:lilygo_t_display_s3"
+fi
 sh build.sh $2 && \
 arduino-cli upload --input-dir build --fqbn $board -p $1 && \
 arduino-cli monitor --fqbn $board -p $1 -c baudrate=115200

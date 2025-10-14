@@ -52,24 +52,25 @@ export const App = () => {
     markdownRef.innerHTML = marked(text);
 
     // serial monitor
-    while (true) {
-      if (!connected() || running()) {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        continue;
-      }
-      try {
-        const val = await esploader().transport.rawRead(1000);
-        // await new Promise((resolve) => setTimeout(resolve, 100));
-        checkFileRead(val);
-        term.write(val);
-      } catch (e) {
-        if (e.message !== "Timeout") {
-          console.error(e);
-          term.writeln(e.message);
-        }
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-      }
-    }
+    // let buffer = new Uint8Array();
+    // while (true) {
+    //   if (!connected() || running()) {
+    //     await new Promise((resolve) => setTimeout(resolve, 1000));
+    //     continue;
+    //   }
+    //   const readLoop = esploader().transport.rawRead(1000);
+    //   const { value, done } = await readLoop.next();
+
+    //   if (done || !value) {
+    //     console.log(buffer);
+    //     term.write(buffer);
+    //     checkFileRead(buffer);
+    //     buffer = new Uint8Array();
+    //     // break;
+    //   }
+
+    //   buffer += value;
+    // }
   });
 
   return (

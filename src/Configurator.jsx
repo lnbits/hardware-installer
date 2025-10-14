@@ -27,7 +27,7 @@ export const Configurator = () => {
   };
 
   const reset = async () => {
-    await esploader().hard_reset();
+    await esploader().hardReset();
     await new Promise((resolve) => setTimeout(resolve, 2000));
   };
 
