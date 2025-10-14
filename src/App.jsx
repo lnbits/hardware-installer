@@ -59,7 +59,6 @@ export const App = () => {
               <Connector />
               <Show when={connected()}>
                 <Programmer />
-                <Configurator />
                 <Show when={elements.length > 0}>
                     <Configurator />
                 </Show>
