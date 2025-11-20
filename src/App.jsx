@@ -87,7 +87,7 @@ export const App = () => {
           Device" button
         </li>
         <li>
-          You may need to press the "boot" button on the ESP32 to start the
+          You may need to press or hold the "boot" button on the ESP32 to start the
           connection
         </li>
         <li>
