@@ -1,24 +1,46 @@
+#include "config.h"
+
 #include <WiFi.h>
 
+int wifiReconnectDelay = 10000;
+int wifiLastReconnectAttempt = 0;
+
 void setupWifi() {
-    WiFi.begin(config_ssid.c_str(), config_password.c_str());
-    Serial.print("Connecting to WiFi.");
-    while (WiFi.status() != WL_CONNECTED) {
-        Serial.print(".");
-        delay(500);
-        digitalWrite(2, HIGH);
-        Serial.print(".");
-        delay(500);
-        digitalWrite(2, LOW);
-    }
-    Serial.println();
-    Serial.println("WiFi connection etablished!");
-    printTFT("WiFi connected!", 21, 69);
+    printHome();
+    Serial.println("Connecting to WiFi...");
+    // @axelhamburch https://github.com/lnbits/bitcoinswitch/pull/46
+    // Force scanning for all APs, for setups with repeaters and same name APs
+    WiFi.setScanMethod(WIFI_ALL_CHANNEL_SCAN);
+    WiFi.begin(config_wifi_ssid.c_str(), config_wifi_password.c_str());
+    wifiLastReconnectAttempt = millis();
 }
 
 void loopWifi() {
-    while (WiFi.status() != WL_CONNECTED) {
-        Serial.println("WiFi disconnected!");
-        delay(500);
+    if (millis() - wifiLastReconnectAttempt >= wifiReconnectDelay && WiFi.status() != WL_CONNECTED) {
+        Serial.println("WiFi disconnected! Reconnecting...");
+        wifiLastReconnectAttempt = millis();
+        wifi_connected = false;
+        printHome();
+        WiFi.reconnect();
+    } else if (WiFi.status() == WL_CONNECTED) {
+        static bool wasConnected = false;
+        if (!wasConnected) {
+            Serial.println("WiFi connected! ip: " + WiFi.localIP().toString());
+            wifi_connected = true;
+            printHome();
+            wasConnected = true;
+        }
     }
+}
+
+// converts the dBm to a range between 0 and 100%
+int8_t getWifiQuality() {
+  int32_t dbm = WiFi.RSSI();
+  if (dbm <= -100) {
+    return 0;
+  } else if (dbm >= -50) {
+    return 100;
+  } else {
+    return 2 * (dbm + 100);
+  }
 }

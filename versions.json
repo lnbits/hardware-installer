@@ -2,10 +2,10 @@
   "name": "genericInstaller",
   "devices": [
     "esp32",
-    "tdisplay"
+    "esp32_s3",
+    "esp32_3248s035",
+    "tdisplay",
+    "tdisplay_s3"
   ],
-  "versions": [
-    "v0.1.0",
-    "v0.0.0"
-  ]
+  "versions": []
 }

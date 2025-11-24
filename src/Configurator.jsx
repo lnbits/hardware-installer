@@ -6,16 +6,19 @@ export const Configurator = () => {
 
   const upload = async () => {
     await reset();
+    // await new Promise((resolve) => setTimeout(resolve, 1000));
     if (esploader().transport.device.writable) {
       // Filter out heading elements before uploading
       const uploadConfig = config().filter((e) => e.type !== "heading");
-      const preparedConfig = JSON.stringify(uploadConfig, null, 2);
+      // format : key=value\n
+      const preparedConfig = uploadConfig.map(e => `${e.name}=${e.value}`).join("\n");
       const writer = esploader().transport.device.writable.getWriter();
       writer.write(enc.encode(`/file-remove\n`));
       const lines = preparedConfig.split("\n");
       for (const line of lines) {
+        console.log(`Uploading line: ${line}`);
         writer.write(enc.encode(`/file-append ${line}\n`));
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 300));
       }
       await writer.write(enc.encode(`/config-done\n`));
       await new Promise((resolve) => setTimeout(resolve, 300));
@@ -24,8 +27,8 @@ export const Configurator = () => {
   };
 
   const reset = async () => {
-    await esploader().hard_reset();
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await esploader().hardReset();
+    await new Promise((resolve) => setTimeout(resolve, 2000));
   };
 
   const deleteConfig = async () => {
@@ -36,6 +39,7 @@ export const Configurator = () => {
     await writer.write(enc.encode(`/config-done\n`));
     await new Promise((resolve) => setTimeout(resolve, 1000));
     writer.releaseLock();
+    await reset();
   };
 
   const read = async () => {

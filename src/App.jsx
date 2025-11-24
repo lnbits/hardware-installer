@@ -25,14 +25,14 @@ export const App = () => {
           configData += line.replace("/file-send ", "") + "\n";
         }
         if (line.startsWith("/file-done")) {
-          const jsonData = JSON.parse(configData);
-          console.log("Configuration data received", jsonData);
+          console.log("Configuration data received", configData);
+          const keyValues = configData.split("\n").map(line => line.split("="));
           const cfg = config()
           cfg.forEach((element) => {
             if (element.type !== "heading") {
-              jsonData.forEach((jsonElement) => {
-                if (jsonElement.name === element.name) {
-                  element.value = jsonElement.value || "";
+              keyValues.forEach((keyValue) => {
+                if (element.name === keyValue[0]) {
+                  element.value = keyValue[1] || "";
                 }
               });
             }
@@ -52,24 +52,25 @@ export const App = () => {
     markdownRef.innerHTML = marked(text);
 
     // serial monitor
-    while (true) {
-      if (!connected() || running()) {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        continue;
-      }
-      try {
-        const val = await esploader().transport.rawRead(1000);
-        // await new Promise((resolve) => setTimeout(resolve, 100));
-        checkFileRead(val);
-        term.write(val);
-      } catch (e) {
-        if (e.message !== "Timeout") {
-          console.error(e);
-          term.writeln(e.message);
-        }
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-      }
-    }
+    // let buffer = new Uint8Array();
+    // while (true) {
+    //   if (!connected() || running()) {
+    //     await new Promise((resolve) => setTimeout(resolve, 1000));
+    //     continue;
+    //   }
+    //   const readLoop = esploader().transport.rawRead(1000);
+    //   const { value, done } = await readLoop.next();
+
+    //   if (done || !value) {
+    //     console.log(buffer);
+    //     term.write(buffer);
+    //     checkFileRead(buffer);
+    //     buffer = new Uint8Array();
+    //     // break;
+    //   }
+
+    //   buffer += value;
+    // }
   });
 
   return (

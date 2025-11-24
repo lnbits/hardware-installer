@@ -1,18 +1,18 @@
 export const addressesAndFiles = [
   {
-    address: "0x1000",
+    address: 0x1000,
     fileName: "bootloader.bin",
   },
   {
-    address: "0x8000",
+    address: 0x8000,
     fileName: "partitions.bin",
   },
   {
-    address: "0xE000",
+    address: 0xE000,
     fileName: "boot_app0.bin",
   },
   {
-    address: "0x10000",
+    address: 0x10000,
     fileName: "main.bin",
   },
 ];
@@ -25,19 +25,19 @@ export const elements = [
     label: "WiFi Settings",
   },
   {
-    name: "config_led_pin",
+    name: "led_pin",
     value: "",
     label: "LED pin",
     type: "text",
   },
   {
-    name: "config_ssid",
+    name: "wifi_ssid",
     value: "",
     label: "WiFi SSID",
     type: "text",
   },
   {
-    name: "config_password",
+    name: "wifi_password",
     value: "",
     label: "WiFi password",
     type: "text",

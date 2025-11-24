@@ -1,28 +1,43 @@
-#include <ArduinoJson.h>
+#include "config.h"
 
+// config
+String config_wifi_ssid;
+String config_wifi_password;
 int config_led_pin;
-String config_ssid;
-String config_password;
+int config_boot_lock;
 
+// app state
+int battery = 0;
+int wifi_connected = false;
+int enable_blink = true;
+
+// ui state
+int currentMenuItem = SCREEN_QR;
+int currentScreen = SCREEN_HOME;
+int currentSetting = SETTING_ENABLE_BLINK;
+
+uint16_t touchX, touchY;
 
 void setup() {
     Serial.begin(115200);
-    #ifdef TFT
-    setupTFT();
+
+    // LilyGo Bug enable battery fix
+    #ifdef TDISPLAY_S3
+      pinMode(PIN_ENABLE5V, OUTPUT);
+      digitalWrite(PIN_ENABLE5V, HIGH);
     #endif
+
+    setupTFT();
     setupConfig();
     setupWifi();
-    pinMode(config_led_pin, OUTPUT); // To blink on board LED
+    setupButtons();
+    setupTouch();
+    setupBattery();
 }
 
 void loop() {
     loopWifi();
-    blinkLed(config_led_pin);
-}
-
-void blinkLed(int pin) {
-    digitalWrite(pin, LOW);
-    delay(2000);
-    digitalWrite(pin, HIGH);
-    delay(2000);
+    loopButtons();
+    loopTouch();
+    loopBattery();
 }

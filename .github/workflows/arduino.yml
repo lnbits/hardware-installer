@@ -1,5 +1,9 @@
 name: arduino
-on: [ push, pull_request ]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
   build-for-esp32:
@@ -8,12 +12,6 @@ jobs:
       matrix:
         fqbn:
           - esp32:esp32:esp32
-          # - esp32:esp32:esp32s3
-          # - esp32:esp32:esp32c3
-          # future bluetooth chips
-          #- esp32:esp32:esp32c2
-          #- esp32:esp32:esp32c6
-          #- esp32:esp32:esp32h2
 
     steps:
       - uses: actions/checkout@v4
@@ -30,8 +28,8 @@ jobs:
           cli-compile-flags: |
             - --warnings="none"
           libraries: |
-            - name: ArduinoJson
             - name: TFT_eSPI
+            - name: QRCodeGenerator
 
       - uses: actions/upload-artifact@v4
         with:
